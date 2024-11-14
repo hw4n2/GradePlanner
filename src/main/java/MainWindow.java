@@ -7,9 +7,6 @@ import javax.swing.border.Border;
 import java.io.File;
 import java.io.IOException;
 
-
-
-
 public class MainWindow extends JFrame {
     private Container frame = null;
     private MainWindow(){
@@ -34,6 +31,7 @@ public class MainWindow extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+        //hello
 
         ImageIcon icon = new ImageIcon("src/main/resources/SymbolMark.png");
         Image img = icon.getImage();
@@ -45,7 +43,8 @@ public class MainWindow extends JFrame {
         JPanel loginInputPanel = new JPanel(new BorderLayout(20, 0));
         loginInputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         loginInputPanel.setBackground(Color.CYAN);
-        loginInputPanel.setSize(600, 400);
+        //loginInputPanel.setSize(600, 400);
+        loginInputPanel.setPreferredSize(new Dimension(400, 400));
 
         JPanel inputPanel = new JPanel(new GridLayout(2, 1, 0, 10));
         inputPanel.setBackground(Color.cyan);
@@ -58,10 +57,11 @@ public class MainWindow extends JFrame {
         loginInputPanel.add(inputPanel, BorderLayout.CENTER);
         loginInputPanel.add(loginBtn, BorderLayout.EAST);
 
-
         MySetLayout.setgbc(gbl, gbc, logo, 3, 1, 2, 3);
         //gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.insets = new Insets(0, 0, 20, 0);
         MySetLayout.setgbc(gbl, gbc, loginInputPanel, 2, 4, 4, 2);
+        gbc.insets = null;
 
         loginPanel.add(logo);
         loginPanel.add(loginInputPanel);
