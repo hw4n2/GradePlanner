@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,13 +26,8 @@ public class MainWindow extends JFrame {
         //https://velog.io/@yu-jin-song/JAVA-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%83%9D%EC%84%B1-%EB%B0%8F-%ED%81%AC%EA%B8%B0-%EC%A1%B0%EC%A0%88
         JPanel loginPanel = new JPanel();
         loginPanel.setBackground(Color.WHITE);
-        GridBagLayout gbl = new GridBagLayout();
-        loginPanel.setLayout(gbl);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-        //hello
+        loginPanel.setLayout(new BorderLayout(0, 20));
+
 
         ImageIcon icon = new ImageIcon("src/main/resources/SymbolMark.png");
         Image img = icon.getImage();
@@ -41,30 +37,30 @@ public class MainWindow extends JFrame {
         logo.setBorder(BorderFactory.createEmptyBorder(50, 0, 20, 0));
 
         JPanel loginInputPanel = new JPanel(new BorderLayout(20, 0));
-        loginInputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        loginInputPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         loginInputPanel.setBackground(Color.CYAN);
-        //loginInputPanel.setSize(600, 400);
-        loginInputPanel.setPreferredSize(new Dimension(400, 400));
+        loginInputPanel.setPreferredSize(new Dimension(500, 120));
 
-        JPanel inputPanel = new JPanel(new GridLayout(2, 1, 0, 10));
-        inputPanel.setBackground(Color.cyan);
+        JPanel inputComPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        inputComPanel.setBackground(Color.cyan);
         JTextField loginIdInput = new JTextField("Student ID (12000000)");
         JTextField loginNameInput = new JTextField("Name");
         JButton loginBtn = new JButton("SignIn");
-        inputPanel.add(loginIdInput);
-        inputPanel.add(loginNameInput);
+        loginBtn.setPreferredSize(new Dimension(120, 120));
+        inputComPanel.add(loginIdInput);
+        inputComPanel.add(loginNameInput);
 
-        loginInputPanel.add(inputPanel, BorderLayout.CENTER);
+        loginInputPanel.add(inputComPanel, BorderLayout.CENTER);
         loginInputPanel.add(loginBtn, BorderLayout.EAST);
 
-        MySetLayout.setgbc(gbl, gbc, logo, 3, 1, 2, 3);
-        gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.insets = new Insets(0, 0, 20, 0);
-        MySetLayout.setgbc(gbl, gbc, loginInputPanel, 2, 4, 4, 2);
-        gbc.insets = null;
+        JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        wrapper.setPreferredSize(new Dimension(500, 120));
+        wrapper.setBackground(Color.WHITE);
+        wrapper.add(loginInputPanel);
 
-        loginPanel.add(logo);
-        loginPanel.add(loginInputPanel);
+        loginPanel.setBorder(new EmptyBorder(0, 0, 10, 0));
+        loginPanel.add(logo, BorderLayout.CENTER);
+        loginPanel.add(wrapper, BorderLayout.SOUTH);
         frame.add(loginPanel);
     }
     public static void main(String[] args) {
