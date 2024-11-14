@@ -9,44 +9,50 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainWindow extends JFrame {
-    private Container frame = null;
+    private Container frame;
+    private CardLayout basePanel;
     private MainWindow(){
         frame = getContentPane();
-        //frame.setLayout()
+        basePanel = new CardLayout();
         setTitle("GradePlanner");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        initLogin();
+        frame.add(initLogin());
 
         setSize(800, 500);
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    private void initLogin(){
-        //https://velog.io/@yu-jin-song/JAVA-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%83%9D%EC%84%B1-%EB%B0%8F-%ED%81%AC%EA%B8%B0-%EC%A1%B0%EC%A0%88
+    private JPanel initLogin(){
         JPanel loginPanel = new JPanel();
         loginPanel.setBackground(Color.WHITE);
-        loginPanel.setLayout(new BorderLayout(0, 20));
+        loginPanel.setLayout(new GridLayout(3, 1, 0, 20));
 
-
-        ImageIcon icon = new ImageIcon("src/main/resources/SymbolMark.png");
+        ImageIcon icon = new ImageIcon("src/main/resources/SymbolMark.jpg");
         Image img = icon.getImage();
-        Image resized = img.getScaledInstance(191, 230, Image.SCALE_SMOOTH);
+        Image resized = img.getScaledInstance(125, 150, Image.SCALE_SMOOTH);
         ImageIcon newIcon = new ImageIcon(resized);
         JLabel logo = new JLabel(newIcon);
-        logo.setBorder(BorderFactory.createEmptyBorder(50, 0, 20, 0));
+        logo.setBorder(BorderFactory.createEmptyBorder(70, 0, 50, 0));
+
+        JLabel progName = new JLabel("GradePlanner");
+        progName.setHorizontalAlignment(SwingConstants.CENTER);
+        progName.setVerticalAlignment(SwingConstants.CENTER);
+        progName.setBackground(Color.WHITE);
+        progName.setFont(progName.getFont().deriveFont(40f));
+        progName.setOpaque(true);
 
         JPanel loginInputPanel = new JPanel(new BorderLayout(20, 0));
-        loginInputPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        loginInputPanel.setBorder(new EmptyBorder(10, 10, 15, 10));
         loginInputPanel.setBackground(Color.CYAN);
-        loginInputPanel.setPreferredSize(new Dimension(500, 120));
+        loginInputPanel.setPreferredSize(new Dimension(300, 100));
 
         JPanel inputComPanel = new JPanel(new GridLayout(2, 1, 0, 10));
         inputComPanel.setBackground(Color.cyan);
         JTextField loginIdInput = new JTextField("Student ID (12000000)");
         JTextField loginNameInput = new JTextField("Name");
         JButton loginBtn = new JButton("SignIn");
-        loginBtn.setPreferredSize(new Dimension(120, 120));
+        loginBtn.setPreferredSize(new Dimension(100, 100));
         inputComPanel.add(loginIdInput);
         inputComPanel.add(loginNameInput);
 
@@ -54,14 +60,15 @@ public class MainWindow extends JFrame {
         loginInputPanel.add(loginBtn, BorderLayout.EAST);
 
         JPanel wrapper = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        wrapper.setPreferredSize(new Dimension(500, 120));
+        wrapper.setPreferredSize(new Dimension(300, 100));
         wrapper.setBackground(Color.WHITE);
         wrapper.add(loginInputPanel);
 
         loginPanel.setBorder(new EmptyBorder(0, 0, 10, 0));
-        loginPanel.add(logo, BorderLayout.CENTER);
-        loginPanel.add(wrapper, BorderLayout.SOUTH);
-        frame.add(loginPanel);
+        loginPanel.add(logo);
+        loginPanel.add(progName);
+        loginPanel.add(wrapper);
+        return loginPanel;
     }
     public static void main(String[] args) {
         MainWindow window = new MainWindow();
