@@ -58,7 +58,7 @@ public class MainWindow extends JFrame {
         loginInputPanel.add(loginBtn, BorderLayout.EAST);
 
         MySetLayout.setgbc(gbl, gbc, logo, 3, 1, 2, 3);
-        //gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.fill = GridBagConstraints.VERTICAL;
         gbc.insets = new Insets(0, 0, 20, 0);
         MySetLayout.setgbc(gbl, gbc, loginInputPanel, 2, 4, 4, 2);
         gbc.insets = null;
