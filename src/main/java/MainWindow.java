@@ -31,7 +31,7 @@ public class MainWindow extends JFrame {
         GridBagLayout gbl = new GridBagLayout();
         loginPanel.setLayout(gbl);
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.NONE;
+        gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
 
@@ -60,6 +60,7 @@ public class MainWindow extends JFrame {
 
 
         MySetLayout.setgbc(gbl, gbc, logo, 3, 1, 2, 3);
+        //gbc.fill = GridBagConstraints.VERTICAL;
         MySetLayout.setgbc(gbl, gbc, loginInputPanel, 2, 4, 4, 2);
 
         loginPanel.add(logo);
