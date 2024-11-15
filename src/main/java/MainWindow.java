@@ -1,3 +1,5 @@
+import pages.LobbyPage;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -10,20 +12,27 @@ import java.io.IOException;
 
 public class MainWindow extends JFrame {
     private Container frame;
-    private CardLayout basePanel;
+    private CardLayout pagesCard;
+    private JPanel pagePanel;
+    private JPanel lobby;
     private MainWindow(){
         frame = getContentPane();
-        basePanel = new CardLayout();
+        pagesCard = new CardLayout();
         setTitle("GradePlanner");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.add(initLogin());
+        frame.add(initPages());
+
+        lobby = new LobbyPage();
+        pagePanel.add(lobby, "lobbyPage");
+        updateCard("lobbyPage");
 
         setSize(800, 500);
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    private JPanel initLogin(){
+    private Container initLogin() {
         JPanel loginPanel = new JPanel();
         loginPanel.setBackground(Color.WHITE);
         loginPanel.setLayout(new GridLayout(3, 1, 0, 20));
@@ -37,7 +46,6 @@ public class MainWindow extends JFrame {
 
         JLabel progName = new JLabel("GradePlanner");
         progName.setHorizontalAlignment(SwingConstants.CENTER);
-        progName.setVerticalAlignment(SwingConstants.CENTER);
         progName.setBackground(Color.WHITE);
         progName.setFont(progName.getFont().deriveFont(40f));
         progName.setOpaque(true);
@@ -70,6 +78,39 @@ public class MainWindow extends JFrame {
         loginPanel.add(wrapper);
         return loginPanel;
     }
+    private Container initPages() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+
+        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        userPanel.setPreferredSize(new Dimension(0, 40));
+        userPanel.setBackground(Color.GREEN);
+
+        JPanel centerPanel = new JPanel(new BorderLayout(10, 20));
+
+        final String[] pageBtns = { "Lobby", "Users", "Details", "Planner", "Settings" };
+        JList<String> btnList = new JList<>(pageBtns);
+        btnList.setBorder(BorderFactory.createEmptyBorder(50, 5, 5, 5));
+        btnList.setFixedCellHeight(50);
+        btnList.setSelectionBackground(null);
+        btnList.setSelectionForeground(null);
+
+        pagePanel = new JPanel(pagesCard); // cardlayout
+        pagePanel.setBackground(Color.BLACK);
+        pagePanel.setOpaque(true);
+
+        centerPanel.add(btnList, BorderLayout.WEST);
+        centerPanel.add(pagePanel, BorderLayout.CENTER);
+
+        mainPanel.add(userPanel, BorderLayout.NORTH);
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        return mainPanel;
+    }
+
+    private void updateCard(String pagename) {
+        pagesCard.show(pagePanel,"lobbyPage");
+    }
+
     public static void main(String[] args) {
         MainWindow window = new MainWindow();
     }
