@@ -1,4 +1,7 @@
 import pages.LobbyPage;
+import pages.SettingPage;
+import pages.RankingPage;
+import pages.DetailsPage;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +17,14 @@ public class MainWindow extends JFrame {
     private Container frame;
     private CardLayout pagesCard;
     private JPanel pagePanel;
+    private JButton userBtn;
+
     private JPanel lobby;
+    private JPanel setting;
+    private JPanel ranking;
+    private JPanel details;
+
+
     private MainWindow(){
         frame = getContentPane();
         pagesCard = new CardLayout();
@@ -25,8 +35,14 @@ public class MainWindow extends JFrame {
         frame.add(initPages());
 
         lobby = new LobbyPage();
+        setting = new SettingPage();
+        ranking = new RankingPage();
+        details = new DetailsPage();
         pagePanel.add(lobby, "lobbyPage");
-        updateCard("lobbyPage");
+        pagePanel.add(setting, "settingPage");
+        pagePanel.add(ranking, "rankingPage");
+        pagePanel.add(details, "detailsPage");
+        updateCard("detailsPage");
 
         setSize(800, 500);
         setLocationRelativeTo(null);
@@ -83,7 +99,17 @@ public class MainWindow extends JFrame {
 
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         userPanel.setPreferredSize(new Dimension(0, 40));
-        userPanel.setBackground(Color.GREEN);
+        userPanel.setBackground(new Color(40, 255, 255));
+        userBtn = new JButton("User 12000000");
+        JButton logoutBtn = new JButton("logout");
+        logoutBtn.setBorderPainted(false);
+        logoutBtn.setContentAreaFilled(false);
+        logoutBtn.setFocusPainted(false);
+        userBtn.setBorderPainted(false);
+        userBtn.setContentAreaFilled(false);
+        userBtn.setFocusPainted(false);
+        userPanel.add(userBtn);
+        userPanel.add(logoutBtn);
 
         JPanel centerPanel = new JPanel(new BorderLayout(10, 20));
 
@@ -108,7 +134,7 @@ public class MainWindow extends JFrame {
     }
 
     private void updateCard(String pagename) {
-        pagesCard.show(pagePanel,"lobbyPage");
+        pagesCard.show(pagePanel, pagename);
     }
 
     public static void main(String[] args) {

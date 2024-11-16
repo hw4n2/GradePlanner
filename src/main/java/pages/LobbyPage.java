@@ -1,10 +1,14 @@
 package pages;
+
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class LobbyPage extends JPanel {
+    private JButton usersBtn;
+    private JButton detailsBtn;
+    private JLabel[] infoLabels;
+
     public LobbyPage() {
         setLayout(new BorderLayout(0, 10));
         setBorder(new EmptyBorder(10, 0, 10, 10));
@@ -24,15 +28,14 @@ public class LobbyPage extends JPanel {
         halfline.setBackground(Color.YELLOW);
         graphPanel.setBackground(Color.GREEN);
 
-
-        JButton usersBtn = new JButton("Users");
-        JButton detailsBtn = new JButton("Details");
+        usersBtn = new JButton("Users");
+        detailsBtn = new JButton("Details");
         btnPanel.add(usersBtn);
         btnPanel.add(detailsBtn);
 
-        JLabel[] infoLabels = {new JLabel("Current Semester"), new JLabel("Major Grade"), new JLabel("Earned Credits"),
-                new JLabel("2-2"), new JLabel("3.5/4.5"), new JLabel("18/65") };
-        for(JLabel la : infoLabels) {
+        infoLabels = new JLabel[] { new JLabel("Current Semester"), new JLabel("Major Grade"), new JLabel("Earned Credits"),
+                new JLabel("-"), new JLabel("- / 4.5"), new JLabel("- / 65") };
+        for (JLabel la : infoLabels) {
             infoPanel.add(la);
         }
 
@@ -43,7 +46,7 @@ public class LobbyPage extends JPanel {
         topPanel.add(infoPanel, BorderLayout.CENTER);
         topPanel.add(halfline, BorderLayout.SOUTH);
 
-       add(topPanel, BorderLayout.NORTH);
-       add(graphPanel, BorderLayout.CENTER);
+        add(topPanel, BorderLayout.NORTH);
+        add(graphPanel, BorderLayout.CENTER);
     }
 }
