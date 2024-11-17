@@ -7,6 +7,7 @@ import javax.swing.border.*;
 public class SettingPage extends JPanel {
     private JButton saveBtn;
     private JButton getPhoto;
+    private JTextField nameInput;
     private JCheckBox nameCheck;
     private JCheckBox gradeCheck;
     private JCheckBox IdCheck;
@@ -36,7 +37,7 @@ public class SettingPage extends JPanel {
         westPanel.setPreferredSize(new Dimension(200, 0));
         westPanel.setBackground(Color.WHITE);
 
-        JPanel settingPanel = new JPanel(new GridLayout(5, 1, 20, 0));
+        JPanel settingPanel = new JPanel(new GridLayout(6, 1, 20, 0));
         settingPanel.setBackground(Color.WHITE);
 
         getPhoto = new JButton("Change Photo");
@@ -65,6 +66,12 @@ public class SettingPage extends JPanel {
         JLabel settingLabel = new JLabel("Check what you want to share");
         settingLabel.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
 
+
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        namePanel.setBackground(Color.WHITE);
+        JLabel nameLabel = new JLabel("Name");
+        namePanel.add(nameLabel);
+        nameInput = new JTextField(10);
         nameCheck = new JCheckBox("Name");
         gradeCheck = new JCheckBox("Grade");
         IdCheck = new JCheckBox("Student ID");
@@ -74,7 +81,9 @@ public class SettingPage extends JPanel {
         IdCheck.setBackground(Color.WHITE);
         semesterCheck.setBackground(Color.WHITE);
 
+        namePanel.add(nameInput);
         settingPanel.add(settingLabel);
+        settingPanel.add(namePanel);
         settingPanel.add(nameCheck);
         settingPanel.add(gradeCheck);
         settingPanel.add(IdCheck);

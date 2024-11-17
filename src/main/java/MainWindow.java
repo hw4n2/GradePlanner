@@ -78,7 +78,7 @@ public class MainWindow extends JFrame {
         JPanel inputComPanel = new JPanel(new GridLayout(2, 1, 0, 10));
         inputComPanel.setBackground(Color.cyan);
         JTextField loginIdInput = new JTextField("Student ID (12000000)");
-        JTextField loginpwInput = new JTextField("Name");
+        JTextField loginpwInput = new JTextField("Password");
         JButton loginBtn = new JButton("SignIn");
         loginBtn.setPreferredSize(new Dimension(100, 100));
         inputComPanel.add(loginIdInput);
