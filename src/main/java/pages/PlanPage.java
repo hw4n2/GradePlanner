@@ -4,17 +4,18 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class DetailsPage extends JPanel {
+public class PlanPage extends JPanel{
     private JLabel infoLabel;
     private JTextField lectureInput;
     private JTextField gradeInput;
     private JTextField creditInput;
+    private JTextField recommendInput;
+    private JLabel nameItem;
+    private JLabel gradeItem;
+    private JLabel creditsItem;
+    private JLabel recommendSemester;
 
-    JLabel nameItem;
-    JLabel gradeItem;
-    JLabel creditsItem;
-
-    public DetailsPage() {
+    public PlanPage() {
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
         Border lineBorder = new LineBorder(Color.BLACK);
         setLayout(new BorderLayout());
@@ -24,7 +25,7 @@ public class DetailsPage extends JPanel {
         JPanel tapPanel = new JPanel(new GridLayout(1, 8, 0, 0));
         tapPanel.setBackground(Color.WHITE);
 
-        String[] semester = { "1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2" };
+        String[] semester = {"1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2"};
         for (int i = 0; i < 8; i++) {
             JButton btn = new JButton(semester[i]);
             tapPanel.add(btn);
@@ -46,41 +47,44 @@ public class DetailsPage extends JPanel {
         JLabel semesterLabel = new JLabel("2 Year 2 Semester");
         JButton saveBtn = new JButton("Save");
 
-        infoLabel = new JLabel("Major Grade 4.1  Earned Credits 12");
+        infoLabel = new JLabel("Credits 12 / 19");
 
         JPanel addedList = new JPanel();
         addedList.setBackground(Color.WHITE);
         addedList.setLayout(new GridLayout(8, 1, 5, 0));
         for (int i = 0; i < 8; i++) {
-            JPanel itemPanel = new JPanel(new GridLayout(1, 4, 15, 2));
+            JPanel itemPanel = new JPanel(new GridLayout(1, 4, 10, 2));
             itemPanel.setBackground(Color.WHITE);
             itemPanel.setPreferredSize(new Dimension(0, 20));
             if(i == 0){
                 nameItem = new JLabel("LectureName");
                 gradeItem = new JLabel("Grade");
                 creditsItem = new JLabel("Credit");
+                recommendSemester = new JLabel("Rec. Semester");
             }
             else {
                 itemPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY));
                 nameItem = new JLabel("LectureName");
                 gradeItem = new JLabel("Grade");
                 creditsItem = new JLabel("Credit");
+                recommendSemester = new JLabel("Rec. Semester");
             }
             JButton deleteBtn = new JButton();
             deleteBtn.setPreferredSize(new Dimension(15, 15));
             deleteBtn.setBorder(new EmptyBorder(5, 5, 5, 5));
             deleteBtn.setText("clear");
+            JLabel emptyLabel = new JLabel();
             if(i == 0){
                 deleteBtn.setText("click to clear");
                 deleteBtn.setBorderPainted(false);
                 deleteBtn.setContentAreaFilled(false);
                 deleteBtn.setFocusPainted(false);
             }
-            JLabel emptyLabel = new JLabel();
 
             itemPanel.add(nameItem);
             itemPanel.add(gradeItem);
             itemPanel.add(creditsItem);
+            itemPanel.add(recommendSemester);
             itemPanel.add(emptyLabel);
             itemPanel.add(deleteBtn);
             addedList.add(itemPanel);
@@ -91,24 +95,25 @@ public class DetailsPage extends JPanel {
         c.gridx = 9; c.gridy = 0; c.weightx = 0.1; c.weighty = 0.3; c.gridwidth = 1; c.gridheight = 1;
         infoPanel.add(saveBtn, c);
         c.gridx = 0; c.gridy = 2; c.weightx = 1.0; c.weighty = 0.5; c.gridwidth = 5; c.gridheight = 1;
-        infoPanel.add(infoLabel, c);
-        c.gridx = 0; c.gridy = 3; c.weightx = 1.0; c.weighty = 1.0; c.gridwidth = 10; c.gridheight = 5;
+        infoPanel.add(infoLabel, c); c.gridx = 0; c.gridy = 3; c.weightx = 1.0; c.weighty = 1.0; c.gridwidth = 10; c.gridheight = 5;
         infoPanel.add(addedList, c);
 
         JPanel topPanel = new JPanel(new GridLayout(1, 2));
         topPanel.setBackground(Color.WHITE);
 
-        lectureInput = new JTextField(20);
-        gradeInput = new JTextField(5);
-        creditInput = new JTextField(5);
+        lectureInput = new JTextField(18);
+        gradeInput = new JTextField(3);
+        creditInput = new JTextField(3);
+        recommendInput = new JTextField(5);
 
         JLabel lectureLabel = new JLabel("LectureName");
         JLabel gradeLabel = new JLabel("Grade");
         JLabel creditLabel = new JLabel("Credit");
+        JLabel recSemesterLabel = new JLabel("Rec. Semester");
 
         JButton addBtn = new JButton("+");
 
-        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         inputPanel.setBackground(Color.WHITE);
         inputPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.GRAY));
         inputPanel.add(lectureLabel);
@@ -117,6 +122,8 @@ public class DetailsPage extends JPanel {
         inputPanel.add(gradeInput);
         inputPanel.add(creditLabel);
         inputPanel.add(creditInput);
+        inputPanel.add(recSemesterLabel);
+        inputPanel.add(recommendInput);
 
         inputPanel.add(addBtn);
 

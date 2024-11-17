@@ -2,6 +2,7 @@ import pages.LobbyPage;
 import pages.SettingPage;
 import pages.RankingPage;
 import pages.DetailsPage;
+import pages.PlanPage;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -23,13 +24,14 @@ public class MainWindow extends JFrame {
     private JPanel setting;
     private JPanel ranking;
     private JPanel details;
-
+    private JPanel plan;
 
     private MainWindow(){
         frame = getContentPane();
         pagesCard = new CardLayout();
         setTitle("GradePlanner");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 
         frame.add(initLogin());
         frame.add(initPages());
@@ -38,11 +40,13 @@ public class MainWindow extends JFrame {
         setting = new SettingPage();
         ranking = new RankingPage();
         details = new DetailsPage();
+        plan = new PlanPage();
         pagePanel.add(lobby, "lobbyPage");
         pagePanel.add(setting, "settingPage");
         pagePanel.add(ranking, "rankingPage");
         pagePanel.add(details, "detailsPage");
-        updateCard("detailsPage");
+        pagePanel.add(plan, "planPage");
+        updateCard("planPage");
 
         setSize(800, 500);
         setLocationRelativeTo(null);
@@ -74,11 +78,11 @@ public class MainWindow extends JFrame {
         JPanel inputComPanel = new JPanel(new GridLayout(2, 1, 0, 10));
         inputComPanel.setBackground(Color.cyan);
         JTextField loginIdInput = new JTextField("Student ID (12000000)");
-        JTextField loginNameInput = new JTextField("Name");
+        JTextField loginpwInput = new JTextField("Name");
         JButton loginBtn = new JButton("SignIn");
         loginBtn.setPreferredSize(new Dimension(100, 100));
         inputComPanel.add(loginIdInput);
-        inputComPanel.add(loginNameInput);
+        inputComPanel.add(loginpwInput);
 
         loginInputPanel.add(inputComPanel, BorderLayout.CENTER);
         loginInputPanel.add(loginBtn, BorderLayout.EAST);
