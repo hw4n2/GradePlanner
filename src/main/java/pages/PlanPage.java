@@ -95,7 +95,8 @@ public class PlanPage extends JPanel{
         c.gridx = 9; c.gridy = 0; c.weightx = 0.1; c.weighty = 0.3; c.gridwidth = 1; c.gridheight = 1;
         infoPanel.add(saveBtn, c);
         c.gridx = 0; c.gridy = 2; c.weightx = 1.0; c.weighty = 0.5; c.gridwidth = 5; c.gridheight = 1;
-        infoPanel.add(infoLabel, c); c.gridx = 0; c.gridy = 3; c.weightx = 1.0; c.weighty = 1.0; c.gridwidth = 10; c.gridheight = 5;
+        infoPanel.add(infoLabel, c);
+        c.gridx = 0; c.gridy = 3; c.weightx = 1.0; c.weighty = 1.0; c.gridwidth = 10; c.gridheight = 5;
         infoPanel.add(addedList, c);
 
         JPanel topPanel = new JPanel(new GridLayout(1, 2));

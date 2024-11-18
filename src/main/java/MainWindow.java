@@ -11,6 +11,8 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,6 +21,7 @@ public class MainWindow extends JFrame {
     private CardLayout pagesCard;
     private JPanel pagePanel;
     private JButton userBtn;
+    private JList<String> btnList;
 
     private JPanel lobby;
     private JPanel setting;
@@ -36,16 +39,16 @@ public class MainWindow extends JFrame {
         frame.add(initLogin());
         frame.add(initPages());
 
-        lobby = new LobbyPage();
+        lobby = new LobbyPage(pagesCard, pagePanel, btnList);
         setting = new SettingPage();
         ranking = new RankingPage();
         details = new DetailsPage();
         plan = new PlanPage();
-        pagePanel.add(lobby, "lobbyPage");
-        pagePanel.add(setting, "settingPage");
-        pagePanel.add(ranking, "rankingPage");
-        pagePanel.add(details, "detailsPage");
-        pagePanel.add(plan, "planPage");
+        pagePanel.add(lobby, "Lobby");
+        pagePanel.add(setting, "Settings");
+        pagePanel.add(ranking, "Users");
+        pagePanel.add(details, "Details");
+        pagePanel.add(plan, "Planner");
         updateCard("planPage");
 
         setSize(800, 500);
@@ -100,7 +103,6 @@ public class MainWindow extends JFrame {
     }
     private Container initPages() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         userPanel.setPreferredSize(new Dimension(0, 40));
         userPanel.setBackground(new Color(40, 255, 255));
@@ -112,19 +114,34 @@ public class MainWindow extends JFrame {
         userBtn.setBorderPainted(false);
         userBtn.setContentAreaFilled(false);
         userBtn.setFocusPainted(false);
+        userBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateCard("Settings");
+                btnList.clearSelection();
+            }
+        });
         userPanel.add(userBtn);
         userPanel.add(logoutBtn);
 
         JPanel centerPanel = new JPanel(new BorderLayout(10, 20));
 
         final String[] pageBtns = { "Lobby", "Users", "Details", "Planner", "Settings" };
-        JList<String> btnList = new JList<>(pageBtns);
+        btnList = new JList<>(pageBtns);
+        btnList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         btnList.setBorder(BorderFactory.createEmptyBorder(50, 5, 5, 5));
         btnList.setFixedCellHeight(50);
         btnList.setSelectionBackground(null);
         btnList.setSelectionForeground(null);
+        btnList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String pagename = (String)btnList.getSelectedValue();
+                updateCard(pagename);
+            }
+        });
 
-        pagePanel = new JPanel(pagesCard); // cardlayout
+        pagePanel = new JPanel(pagesCard);
         pagePanel.setBackground(Color.BLACK);
         pagePanel.setOpaque(true);
 

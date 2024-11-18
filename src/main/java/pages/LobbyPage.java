@@ -1,15 +1,20 @@
 package pages;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class LobbyPage extends JPanel {
-    private JButton usersBtn;
-    private JButton detailsBtn;
     private JLabel[] infoLabels;
+    private CardLayout pagesCard;
+    private JPanel pagePanel;
+    private JList<String> btnList;
 
-    public LobbyPage() {
+    public LobbyPage(CardLayout c, JPanel p, JList<String> l) {
+        pagesCard = c;
+        pagePanel = p;
+        btnList = l;
         setLayout(new BorderLayout(0, 10));
         setBorder(new EmptyBorder(10, 0, 10, 10));
 
@@ -28,8 +33,10 @@ public class LobbyPage extends JPanel {
         halfline.setBackground(Color.YELLOW);
         graphPanel.setBackground(Color.GREEN);
 
-        usersBtn = new JButton("Users");
-        detailsBtn = new JButton("Details");
+        JButton usersBtn = new JButton("Users");
+        JButton detailsBtn = new JButton("Details");
+        usersBtn.addActionListener(new MoveBtnEvent());
+        detailsBtn.addActionListener(new MoveBtnEvent());
         btnPanel.add(usersBtn);
         btnPanel.add(detailsBtn);
 
@@ -49,4 +56,13 @@ public class LobbyPage extends JPanel {
         add(topPanel, BorderLayout.NORTH);
         add(graphPanel, BorderLayout.CENTER);
     }
+
+    public class MoveBtnEvent implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JButton b = (JButton)e.getSource();
+            pagesCard.show(pagePanel, b.getText());
+            btnList.clearSelection();
+    }
+}
 }
