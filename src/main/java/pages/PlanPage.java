@@ -53,19 +53,17 @@ public class PlanPage extends JPanel{
         addedList.setBackground(Color.WHITE);
         addedList.setLayout(new GridLayout(8, 1, 5, 0));
         for (int i = 0; i < 8; i++) {
-            JPanel itemPanel = new JPanel(new GridLayout(1, 4, 10, 2));
+            JPanel itemPanel = new JPanel(new GridLayout(1, 6, 10, 2));
             itemPanel.setBackground(Color.WHITE);
             itemPanel.setPreferredSize(new Dimension(0, 20));
             if(i == 0){
                 nameItem = new JLabel("LectureName");
-                gradeItem = new JLabel("Grade");
                 creditsItem = new JLabel("Credit");
                 recommendSemester = new JLabel("Rec. Semester");
             }
             else {
                 itemPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY));
                 nameItem = new JLabel("LectureName");
-                gradeItem = new JLabel("Grade");
                 creditsItem = new JLabel("Credit");
                 recommendSemester = new JLabel("Rec. Semester");
             }
@@ -82,7 +80,6 @@ public class PlanPage extends JPanel{
             }
 
             itemPanel.add(nameItem);
-            itemPanel.add(gradeItem);
             itemPanel.add(creditsItem);
             itemPanel.add(recommendSemester);
             itemPanel.add(emptyLabel);
@@ -108,7 +105,6 @@ public class PlanPage extends JPanel{
         recommendInput = new JTextField(5);
 
         JLabel lectureLabel = new JLabel("LectureName");
-        JLabel gradeLabel = new JLabel("Grade");
         JLabel creditLabel = new JLabel("Credit");
         JLabel recSemesterLabel = new JLabel("Rec. Semester");
 
@@ -119,8 +115,6 @@ public class PlanPage extends JPanel{
         inputPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.GRAY));
         inputPanel.add(lectureLabel);
         inputPanel.add(lectureInput);
-        inputPanel.add(gradeLabel);
-        inputPanel.add(gradeInput);
         inputPanel.add(creditLabel);
         inputPanel.add(creditInput);
         inputPanel.add(recSemesterLabel);

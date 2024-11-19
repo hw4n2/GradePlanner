@@ -129,7 +129,7 @@ public class MainWindow extends JFrame {
         final String[] pageBtns = { "Lobby", "Users", "Details", "Planner", "Settings" };
         btnList = new JList<>(pageBtns);
         btnList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        btnList.setBorder(BorderFactory.createEmptyBorder(50, 5, 5, 5));
+        btnList.setBorder(new EmptyBorder(50, 5, 5, 5));
         btnList.setFixedCellHeight(50);
         btnList.setSelectionBackground(null);
         btnList.setSelectionForeground(null);
