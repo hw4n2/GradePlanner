@@ -7,13 +7,9 @@ import javax.swing.border.EmptyBorder;
 
 public class LobbyPage extends JPanel {
     private JLabel[] infoLabels;
-    private CardLayout pagesCard;
-    private JPanel pagePanel;
     private JList<String> btnList;
 
-    public LobbyPage(CardLayout c, JPanel p, JList<String> l) {
-        pagesCard = c;
-        pagePanel = p;
+    public LobbyPage(JList<String> l) {
         btnList = l;
         setLayout(new BorderLayout(0, 10));
         setBorder(new EmptyBorder(10, 0, 10, 10));
@@ -61,8 +57,7 @@ public class LobbyPage extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton b = (JButton)e.getSource();
-            pagesCard.show(pagePanel, b.getText());
-            btnList.clearSelection();
+            btnList.setSelectedValue(b.getText(), false);
     }
 }
 }

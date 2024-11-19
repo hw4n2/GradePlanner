@@ -1,13 +1,14 @@
 package data.models;
 
-class UserModel extends UserDataModel {
-    int studentID;
+public class UserModel {
+    String studentID;
     String name;
-    public UserModel() {
-
+    public UserModel(String id, String name) {
+        this.studentID = id;
+        this.name = name;
     }
 
-    public int getStudentID() {
+    public String getStudentID() {
         return studentID;
     }
     public String getName() {

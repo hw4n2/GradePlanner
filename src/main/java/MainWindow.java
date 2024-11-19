@@ -1,20 +1,12 @@
-import pages.LobbyPage;
-import pages.SettingPage;
-import pages.RankingPage;
-import pages.DetailsPage;
-import pages.PlanPage;
+import pages.*;
+import data.io.*;
+import data.models.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.border.*;
+import javax.swing.event.*;
 
 public class MainWindow extends JFrame {
     private Container frame;
@@ -29,33 +21,24 @@ public class MainWindow extends JFrame {
     private JPanel details;
     private JPanel plan;
 
+    private UserModel loginUser;
+    private UserManager userManager;;
+
     private MainWindow(){
         frame = getContentPane();
         pagesCard = new CardLayout();
         setTitle("GradePlanner");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        userManager = new UserManager();
 
-
-        frame.add(initLogin());
         frame.add(initPages());
-
-        lobby = new LobbyPage(pagesCard, pagePanel, btnList);
-        setting = new SettingPage();
-        ranking = new RankingPage();
-        details = new DetailsPage();
-        plan = new PlanPage();
-        pagePanel.add(lobby, "Lobby");
-        pagePanel.add(setting, "Settings");
-        pagePanel.add(ranking, "Users");
-        pagePanel.add(details, "Details");
-        pagePanel.add(plan, "Planner");
-        updateCard("planPage");
+        frame.add(initLogin());
 
         setSize(800, 500);
         setLocationRelativeTo(null);
         setVisible(true);
     }
-    private Container initLogin() {
+    private JPanel initLogin() {
         JPanel loginPanel = new JPanel();
         loginPanel.setBackground(Color.WHITE);
         loginPanel.setLayout(new GridLayout(3, 1, 0, 20));
@@ -78,13 +61,31 @@ public class MainWindow extends JFrame {
         loginInputPanel.setBackground(Color.CYAN);
         loginInputPanel.setPreferredSize(new Dimension(300, 100));
 
-        JPanel inputComPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        JPanel inputComPanel = new JPanel(new GridLayout(2, 2, 0, 10));
         inputComPanel.setBackground(Color.cyan);
-        JTextField loginIdInput = new JTextField("Student ID (12000000)");
-        JTextField loginpwInput = new JTextField("Password");
+        JLabel idLabel = new JLabel("Student ID");
+        JLabel pwLabel = new JLabel("Password");
+        JTextField loginIdInput = new JTextField();
+        JPasswordField loginpwInput = new JPasswordField();
         JButton loginBtn = new JButton("SignIn");
         loginBtn.setPreferredSize(new Dimension(100, 100));
+        loginBtn.addActionListener(new ActionListener(){ //login event
+            public void actionPerformed(ActionEvent e) {
+                if((loginUser = userManager.login(loginIdInput.getText(), new String(loginpwInput.getPassword()))) == null){
+                    System.out.println("Login Failed");
+                }
+                else {
+                    System.out.println("[sign in] " + loginUser.getStudentID());
+                    frame.removeAll();
+                    frame.add(initPages());
+                    updateCard("Lobby");
+                    userBtn.setText("User " + loginUser.getName());
+                }
+            }
+        });
+        inputComPanel.add(idLabel);
         inputComPanel.add(loginIdInput);
+        inputComPanel.add(pwLabel);
         inputComPanel.add(loginpwInput);
 
         loginInputPanel.add(inputComPanel, BorderLayout.CENTER);
@@ -101,7 +102,7 @@ public class MainWindow extends JFrame {
         loginPanel.add(wrapper);
         return loginPanel;
     }
-    private Container initPages() {
+    private JPanel initPages() {
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         userPanel.setPreferredSize(new Dimension(0, 40));
@@ -119,6 +120,17 @@ public class MainWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 updateCard("Settings");
                 btnList.clearSelection();
+            }
+        });
+        logoutBtn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.removeAll();
+                frame.add(initLogin());
+                revalidate();
+                repaint();
+                System.out.println("[logout] " + loginUser.getStudentID());
+                loginUser = null;
             }
         });
         userPanel.add(userBtn);
@@ -151,11 +163,23 @@ public class MainWindow extends JFrame {
         mainPanel.add(userPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
+        lobby = new LobbyPage(btnList);
+        setting = new SettingPage();
+        ranking = new RankingPage();
+        details = new DetailsPage();
+        plan = new PlanPage();
+        pagePanel.add(lobby, "Lobby");
+        pagePanel.add(setting, "Settings");
+        pagePanel.add(ranking, "Users");
+        pagePanel.add(details, "Details");
+        pagePanel.add(plan, "Planner");
+
         return mainPanel;
     }
 
     private void updateCard(String pagename) {
         pagesCard.show(pagePanel, pagename);
+        btnList.clearSelection();
     }
 
     public static void main(String[] args) {
