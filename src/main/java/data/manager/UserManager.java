@@ -1,4 +1,4 @@
-package data.io;
+package data.manager;
 
 import data.models.*;
 
