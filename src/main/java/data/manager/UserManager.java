@@ -8,6 +8,9 @@ public class UserManager {
         fileManager = new CSVManager();
     }
     public UserModel login(String id, String password) {
+        id = id.trim();
+        password = password.trim();
+        if(id.isEmpty() || password.isEmpty()) { return null; }
         return fileManager.verifyUser(id, password);
     }
 }

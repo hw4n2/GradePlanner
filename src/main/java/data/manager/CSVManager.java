@@ -44,6 +44,7 @@ class CSVManager {
 
             while((line = br.readLine()) != null){
                 String[] field = line.split(",");
+                if(field.length == 0) break;
                 if(field[0].equals(id)){
                     if(field[1].equals(password)) {
                         return new UserModel(field[0], field[2]);

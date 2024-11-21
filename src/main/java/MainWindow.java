@@ -1,5 +1,5 @@
 import pages.*;
-import data.io.*;
+import data.manager.*;
 import data.models.*;
 
 import java.awt.*;
@@ -69,9 +69,11 @@ public class MainWindow extends JFrame {
         JPasswordField loginpwInput = new JPasswordField();
         JButton loginBtn = new JButton("SignIn");
         loginBtn.setPreferredSize(new Dimension(100, 100));
-        loginBtn.addActionListener(new ActionListener(){ //login event
+        loginBtn.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
-                if((loginUser = userManager.login(loginIdInput.getText(), new String(loginpwInput.getPassword()))) == null){
+                String id = loginIdInput.getText();
+                String pw = new String(loginpwInput.getPassword());
+                if((loginUser = userManager.login(id, pw)) == null){
                     System.out.println("Login Failed");
                 }
                 else {
