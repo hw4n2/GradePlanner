@@ -65,8 +65,8 @@ public class MainWindow extends JFrame {
         inputComPanel.setBackground(Color.cyan);
         JLabel idLabel = new JLabel("Student ID");
         JLabel pwLabel = new JLabel("Password");
-        JTextField loginIdInput = new JTextField();
-        JPasswordField loginpwInput = new JPasswordField();
+        JTextField loginIdInput = new JTextField("12211587");
+        JPasswordField loginpwInput = new JPasswordField("1234");
         JButton loginBtn = new JButton("SignIn");
         loginBtn.setPreferredSize(new Dimension(100, 100));
         loginBtn.addActionListener(new ActionListener(){
@@ -82,6 +82,25 @@ public class MainWindow extends JFrame {
                     frame.add(initPages());
                     updateCard("Lobby");
                     userBtn.setText("User " + loginUser.getName());
+                    /////////
+                    CourseManager cm = new CourseManager();
+                    cm.setCourseList(loginUser.getEnrollment());
+                }
+            }
+        });
+        loginIdInput.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    loginBtn.doClick();
+                }
+            }
+        });
+        loginpwInput.addKeyListener(new KeyAdapter(){
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    loginBtn.doClick();
                 }
             }
         });
