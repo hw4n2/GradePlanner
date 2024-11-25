@@ -1,12 +1,16 @@
 package pages;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 import javax.swing.border.*;
 
 public class DetailsPage extends JPanel {
     private JLabel infoLabel;
-    private JTextField lectureInput;
+    private JComboBox<String> lectureInput;
     private JTextField gradeInput;
     private JTextField creditInput;
 
@@ -24,9 +28,18 @@ public class DetailsPage extends JPanel {
         JPanel tapPanel = new JPanel(new GridLayout(1, 8, 0, 0));
         tapPanel.setBackground(Color.WHITE);
 
+        JLabel semesterLabel = new JLabel("1 Year 1 Semester");
+
         String[] semester = { "1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2" };
         for (int i = 0; i < 8; i++) {
             JButton btn = new JButton(semester[i]);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String semesterText = btn.getText().charAt(0) + " Year " + btn.getText().charAt(4) + " Semester";
+                    semesterLabel.setText(semesterText);
+                }
+            });
             tapPanel.add(btn);
         }
 
@@ -38,12 +51,14 @@ public class DetailsPage extends JPanel {
         infoPanel.setBackground(Color.WHITE);
         JPanel inputWrapper = new JPanel();
         inputWrapper.setBackground(Color.WHITE);
-        inputWrapper.setLayout(new BorderLayout());
+        //inputWrapper.setLayout(new BorderLayout());
+        inputWrapper.setLayout(new BoxLayout(inputWrapper, BoxLayout.Y_AXIS));
+
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
 
-        JLabel semesterLabel = new JLabel("2 Year 2 Semester");
+
         JButton saveBtn = new JButton("Save");
 
         infoLabel = new JLabel("Major Grade 4.1  Earned Credits 12");
@@ -95,16 +110,28 @@ public class DetailsPage extends JPanel {
         c.gridx = 0; c.gridy = 3; c.weightx = 1.0; c.weighty = 1.0; c.gridwidth = 10; c.gridheight = 5;
         infoPanel.add(addedList, c);
 
-        JPanel topPanel = new JPanel(new GridLayout(1, 2));
+        JPanel topPanel = new JPanel(new GridLayout(2, 1));
         topPanel.setBackground(Color.WHITE);
 
-        lectureInput = new JTextField(20);
+        lectureInput = new JComboBox<>();
         gradeInput = new JTextField(5);
         creditInput = new JTextField(5);
+        creditInput.setEnabled(false);
+        lectureInput.setPreferredSize(new Dimension(260, 20));
+        lectureInput.setMaximumRowCount(4);
+        lectureInput.setEditable(true);
+
+        lectureInput.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                lectureInput.showPopup();
+            }
+        });
 
         JLabel lectureLabel = new JLabel("LectureName");
         JLabel gradeLabel = new JLabel("Grade");
         JLabel creditLabel = new JLabel("Credit");
+
 
         JButton addBtn = new JButton("+");
 
@@ -117,13 +144,10 @@ public class DetailsPage extends JPanel {
         inputPanel.add(gradeInput);
         inputPanel.add(creditLabel);
         inputPanel.add(creditInput);
-
         inputPanel.add(addBtn);
-
         topPanel.add(inputPanel);
 
-        inputWrapper.add(topPanel, BorderLayout.NORTH);
-        //inputWrapper.add() search panel
+        inputWrapper.add(topPanel);
         detailPanel.add(infoPanel, BorderLayout.NORTH);
         detailPanel.add(inputWrapper, BorderLayout.CENTER);
         add(tapPanel, BorderLayout.NORTH);
