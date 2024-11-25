@@ -1,6 +1,8 @@
 package data.manager;
 
 import data.models.*;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.*;
@@ -40,6 +42,11 @@ class CSVManager {
     }
 
     UserModel verifyUser(String id, String password) {
+        if(id.charAt(0) == '2' || id.length() != 8) {
+            JOptionPane.showMessageDialog(null,
+                    "Only for undergraduate students enrolled in 2019-2024", "register error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
         try {
             br = new BufferedReader(new FileReader(usersfile));
             String line = null;
@@ -73,7 +80,7 @@ class CSVManager {
                 String[] field = line.split(",");
                 if(field.length == 0) break;
                 if(field.length != 5) return null;
-                courseList.add(new CourseModel(field[0], field[1], field[2], field[3], field[4]));
+                courseList.add(new CourseModel(field));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -23,6 +23,7 @@ public class MainWindow extends JFrame {
 
     private UserModel loginUser;
     private UserManager userManager;;
+    private CourseManager courseManager;
 
     private MainWindow(){
         frame = getContentPane();
@@ -30,6 +31,7 @@ public class MainWindow extends JFrame {
         setTitle("GradePlanner");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userManager = new UserManager();
+        courseManager = new CourseManager();
 
         frame.add(initPages());
         frame.add(initLogin());
@@ -82,9 +84,7 @@ public class MainWindow extends JFrame {
                     frame.add(initPages());
                     updateCard("Lobby");
                     userBtn.setText("User " + loginUser.getName());
-                    /////////
-                    CourseManager cm = new CourseManager();
-                    cm.setCourseList(loginUser.getEnrollment());
+                    courseManager.setCourseList(loginUser.getEnrollment());
                 }
             }
         });
@@ -152,6 +152,7 @@ public class MainWindow extends JFrame {
                 repaint();
                 System.out.println("[logout] " + loginUser.getStudentID());
                 loginUser = null;
+                courseManager.clearCourseList();
             }
         });
         userPanel.add(userBtn);
