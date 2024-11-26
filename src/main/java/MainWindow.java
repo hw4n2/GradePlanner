@@ -37,7 +37,7 @@ public class MainWindow extends JFrame {
         frame.add(initPages());
         frame.add(initLogin());
 
-        setSize(800, 500);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
         setVisible(true);
     }

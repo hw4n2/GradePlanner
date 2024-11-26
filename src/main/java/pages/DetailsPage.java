@@ -2,17 +2,21 @@ package pages;
 
 import data.models.*;
 import data.manager.*;
+import events.SearchEvent;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DetailsPage extends JPanel {
     private JLabel infoLabel;
     private JComboBox<String> lectureInput;
-    private JTextField gradeInput;
+    private JComboBox<String> gradeInput;
     private JTextField creditInput;
+    private JTextField lectureIDInput;
 
     JLabel nameItem;
     JLabel gradeItem;
@@ -52,13 +56,9 @@ public class DetailsPage extends JPanel {
         JPanel inputWrapper = new JPanel();
         inputWrapper.setBackground(Color.WHITE);
         inputWrapper.setLayout(new FlowLayout(FlowLayout.CENTER));
-        //inputWrapper.setLayout(new BoxLayout(inputWrapper, BoxLayout.Y_AXIS));
-
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
-
-
         JButton saveBtn = new JButton("Save");
 
         infoLabel = new JLabel("Major Grade 4.1  Earned Credits 12");
@@ -114,33 +114,48 @@ public class DetailsPage extends JPanel {
         topPanel.setBackground(Color.WHITE);
 
         lectureInput = new JComboBox<>();
-        gradeInput = new JTextField(5);
-        creditInput = new JTextField(5);
+        gradeInput = new JComboBox<>();
+        lectureIDInput = new JTextField(5);
+        lectureIDInput.setEnabled(false);
+        lectureIDInput.setDisabledTextColor(Color.BLACK);
+        creditInput = new JTextField(3);
         creditInput.setEnabled(false);
-        lectureInput.setPreferredSize(new Dimension(260, 20));
-        lectureInput.setMaximumRowCount(4);
+        creditInput.setDisabledTextColor(Color.BLACK);
+        lectureInput.setPreferredSize(new Dimension(320, 20));
+        lectureInput.setMaximumRowCount(9);
         lectureInput.setEditable(true);
 
-        lectureInput.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+        gradeInput.setMaximumRowCount(9);
+        gradeInput.addItem("A+");
+        gradeInput.addItem("A0");
+        gradeInput.addItem("B+");
+        gradeInput.addItem("B0");
+        gradeInput.addItem("C+");
+        gradeInput.addItem("C0");
+        gradeInput.addItem("D+");
+        gradeInput.addItem("D0");
+        gradeInput.addItem("F");
+
+        lectureInput.getEditor().getEditorComponent().addKeyListener(new SearchEvent(lectureInput, courseManager));
+        lectureInput.addItemListener(new ItemListener() {
             @Override
-            public void keyReleased(KeyEvent e) {
-                String inputText = lectureInput.getEditor().getItem().toString();
-                if(inputText.isEmpty()) lectureInput.hidePopup();
-                else {
-                    lectureInput.removeAllItems();
-                    ArrayList<String> list = courseManager.searchCourse(inputText);
-                    for(String c : list) {
-                        lectureInput.addItem(c);
-                    }
-                    lectureInput.showPopup();
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() != ItemEvent.SELECTED){
+                    return;
+                }
+                String selectedLecture = (String)lectureInput.getSelectedItem();
+                CourseModel course = courseManager.getCourse(selectedLecture);
+                if(course != null) {
+                    lectureIDInput.setText(course.getCourseID());
+                    creditInput.setText(course.getCredit());
                 }
             }
         });
 
         JLabel lectureLabel = new JLabel("LectureName");
+        JLabel lectureIDLabel = new JLabel("LectureID");
         JLabel gradeLabel = new JLabel("Grade");
         JLabel creditLabel = new JLabel("Credit");
-
 
         JButton addBtn = new JButton("+");
 
@@ -149,11 +164,14 @@ public class DetailsPage extends JPanel {
         inputPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.GRAY));
         inputPanel.add(lectureLabel);
         inputPanel.add(lectureInput);
-        inputPanel.add(gradeLabel);
-        inputPanel.add(gradeInput);
+        inputPanel.add(lectureIDLabel);
+        inputPanel.add(lectureIDInput);
         inputPanel.add(creditLabel);
         inputPanel.add(creditInput);
+        inputPanel.add(gradeLabel);
+        inputPanel.add(gradeInput);
         inputPanel.add(addBtn);
+        inputPanel.setBorder(new EmptyBorder(1, 0, 0, 0));
         topPanel.add(inputPanel);
 
         inputWrapper.add(topPanel);
