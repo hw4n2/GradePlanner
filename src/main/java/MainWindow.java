@@ -22,6 +22,7 @@ public class MainWindow extends JFrame {
     private JPanel plan;
 
     private UserModel loginUser;
+    private CourseModel courseModel;
     private UserManager userManager;;
     private CourseManager courseManager;
 
@@ -188,7 +189,7 @@ public class MainWindow extends JFrame {
         lobby = new LobbyPage(btnList);
         setting = new SettingPage();
         ranking = new RankingPage();
-        details = new DetailsPage();
+        details = new DetailsPage(courseManager);
         plan = new PlanPage();
         pagePanel.add(lobby, "Lobby");
         pagePanel.add(setting, "Settings");

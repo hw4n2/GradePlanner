@@ -1,12 +1,12 @@
 package pages;
 
+import data.models.*;
+import data.manager.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import java.util.*;
 
 public class DetailsPage extends JPanel {
     private JLabel infoLabel;
@@ -18,7 +18,7 @@ public class DetailsPage extends JPanel {
     JLabel gradeItem;
     JLabel creditsItem;
 
-    public DetailsPage() {
+    public DetailsPage(CourseManager courseManager) {
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
         Border lineBorder = new LineBorder(Color.BLACK);
         setLayout(new BorderLayout());
@@ -51,8 +51,8 @@ public class DetailsPage extends JPanel {
         infoPanel.setBackground(Color.WHITE);
         JPanel inputWrapper = new JPanel();
         inputWrapper.setBackground(Color.WHITE);
-        //inputWrapper.setLayout(new BorderLayout());
-        inputWrapper.setLayout(new BoxLayout(inputWrapper, BoxLayout.Y_AXIS));
+        inputWrapper.setLayout(new FlowLayout(FlowLayout.CENTER));
+        //inputWrapper.setLayout(new BoxLayout(inputWrapper, BoxLayout.Y_AXIS));
 
 
         GridBagConstraints c = new GridBagConstraints();
@@ -123,8 +123,17 @@ public class DetailsPage extends JPanel {
 
         lectureInput.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                lectureInput.showPopup();
+            public void keyReleased(KeyEvent e) {
+                String inputText = lectureInput.getEditor().getItem().toString();
+                if(inputText.isEmpty()) lectureInput.hidePopup();
+                else {
+                    lectureInput.removeAllItems();
+                    ArrayList<String> list = courseManager.searchCourse(inputText);
+                    for(String c : list) {
+                        lectureInput.addItem(c);
+                    }
+                    lectureInput.showPopup();
+                }
             }
         });
 

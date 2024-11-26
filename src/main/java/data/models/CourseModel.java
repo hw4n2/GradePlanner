@@ -30,6 +30,6 @@ public class CourseModel {
 
     @Override
     public String toString() {
-        return courseID + " " + courseName + " " + credit + " " + getSemester();
+        return courseName;
     }
 }
