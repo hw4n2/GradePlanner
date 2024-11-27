@@ -191,7 +191,7 @@ public class MainWindow extends JFrame {
         setting = new SettingPage();
         ranking = new RankingPage();
         details = new DetailsPage(courseManager);
-        plan = new PlanPage();
+        plan = new PlanPage(courseManager);
         pagePanel.add(lobby, "Lobby");
         pagePanel.add(setting, "Settings");
         pagePanel.add(ranking, "Users");

@@ -33,7 +33,7 @@ public class DetailsPage extends JPanel {
         JPanel tapPanel = new JPanel(new GridLayout(1, 8, 0, 0));
         tapPanel.setBackground(Color.WHITE);
 
-        JLabel semesterLabel = new JLabel("1 Year 1 Semester");
+        JLabel semesterLabel = new JLabel("- Year - Semester");
 
         String[] semester = { "1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2" };
         for (int i = 0; i < 8; i++) {
@@ -71,6 +71,7 @@ public class DetailsPage extends JPanel {
         JPanel itemPanel = new JPanel(new GridLayout(1, 5, 10, 2));
         itemPanel.setBackground(Color.WHITE);
         itemPanel.setPreferredSize(new Dimension(0, 20));
+        itemPanel.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
         idItem = new JLabel("LectureID");
         nameItem = new JLabel("LectureName");
         gradeItem = new JLabel("Grade");
@@ -169,32 +170,10 @@ public class DetailsPage extends JPanel {
                 inputlist.add(courseToAdd);
                 addedList.removeAll();
                 addedList.add(itemPanel);
-                Vector<JButton> delbtnList = new Vector<>();
                 for(CourseUIModel c : inputlist){
                     addedList.add(c);
-                    delbtnList.add(c.getButton());
+                    c.addRemoveEvent(inputlist, addedList, itemPanel);
                 }
-//                for(CourseUIModel c : inputlist){
-//                    c.getButton().addActionListener(new ActionListener() {
-//                        @Override
-//                        public void actionPerformed(ActionEvent e) {
-//                            Iterator<CourseUIModel> iter = inputlist.iterator();
-//                            while(iter.hasNext()){
-//                                if(iter.next().getCourseName().equals(nameItem.getText())) {
-//                                    iter.remove();
-//                                    break;
-//                                }
-//                            }
-//                            addedList.removeAll();
-//                            addedList.add(itemPanel);
-//                            for(CourseUIModel newC : inputlist){
-//                                addedList.add(newC);
-//                            }
-//                            addedList.revalidate();
-//                            addedList.repaint();
-//                        }
-//                    });
-//                }
                 addedList.revalidate();
                 addedList.repaint();
             }
@@ -212,7 +191,6 @@ public class DetailsPage extends JPanel {
         inputPanel.add(gradeLabel);
         inputPanel.add(gradeInput);
         inputPanel.add(addBtn);
-        inputPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.GRAY));
         topPanel.add(inputPanel);
 
         inputWrapper.add(topPanel);

@@ -22,7 +22,7 @@ public class CourseUIModel extends JPanel {
         setLayout(new GridLayout(1, 5, 10, 2));
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(0, 20));
-        setBorder(new MatteBorder(1, 0, 0, 0, Color.GRAY));
+        setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
 
         idItem.setText(course.getCourseID());
         nameItem.setText(course.getCourseName());
@@ -55,17 +55,22 @@ public class CourseUIModel extends JPanel {
         return deleteBtn;
     }
 
-    public void addRemoveEvent(Vector<CourseUIModel> v, JPanel parentPanel) {
+    public void addRemoveEvent(Vector<CourseUIModel> v, JPanel parentPanel, JPanel titlePanel) {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(v.isEmpty()) return;
+                parentPanel.removeAll();
+                parentPanel.add(titlePanel);
                 Iterator<CourseUIModel> iter = v.iterator();
                 while(iter.hasNext()){
                     if(iter.next().getCourseName().equals(nameItem.getText())) {
                         iter.remove();
                         break;
                     }
+                }
+                for(CourseUIModel c : v){
+                    parentPanel.add(c);
                 }
                 parentPanel.revalidate();
                 parentPanel.repaint();

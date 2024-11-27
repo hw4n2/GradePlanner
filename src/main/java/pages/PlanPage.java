@@ -1,21 +1,32 @@
 package pages;
 
+import data.models.*;
+import data.manager.*;
+import events.SearchEvent;
+
+import java.util.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import javax.swing.*;
 import javax.swing.border.*;
 
 public class PlanPage extends JPanel{
     private JLabel infoLabel;
-    private JTextField lectureInput;
-    private JTextField gradeInput;
+    private JComboBox<String> lectureInput;
+    private JTextField lectureIDInput;
     private JTextField creditInput;
     private JTextField recommendInput;
-    private JLabel nameItem;
-    private JLabel gradeItem;
-    private JLabel creditsItem;
-    private JLabel recommendSemester;
+    private CourseModel curCourse;
 
-    public PlanPage() {
+    private JLabel idItem;
+    private JLabel nameItem;
+    private JLabel creditsItem;
+    private JLabel recSemesterItem;
+
+    public PlanPage(CourseManager courseManager) {
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
         Border lineBorder = new LineBorder(Color.BLACK);
         setLayout(new BorderLayout());
@@ -25,9 +36,17 @@ public class PlanPage extends JPanel{
         JPanel tapPanel = new JPanel(new GridLayout(1, 8, 0, 0));
         tapPanel.setBackground(Color.WHITE);
 
+        JLabel semesterLabel = new JLabel("- Year - Semester");
         String[] semester = {"1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2"};
         for (int i = 0; i < 8; i++) {
             JButton btn = new JButton(semester[i]);
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e){
+                    String semesterText = btn.getText().charAt(0) + " Year " + btn.getText().charAt(4) + " Semester";
+                    semesterLabel.setText(semesterText);
+                }
+            });
             tapPanel.add(btn);
         }
 
@@ -43,49 +62,34 @@ public class PlanPage extends JPanel{
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
-
-        JLabel semesterLabel = new JLabel("2 Year 2 Semester");
         JButton saveBtn = new JButton("Save");
 
-        infoLabel = new JLabel("Credits 12 / 19");
+        infoLabel = new JLabel("Credits - / 19");
 
         JPanel addedList = new JPanel();
         addedList.setBackground(Color.WHITE);
         addedList.setLayout(new GridLayout(8, 1, 5, 0));
-        for (int i = 0; i < 8; i++) {
-            JPanel itemPanel = new JPanel(new GridLayout(1, 6, 10, 2));
-            itemPanel.setBackground(Color.WHITE);
-            itemPanel.setPreferredSize(new Dimension(0, 20));
-            if(i == 0){
-                nameItem = new JLabel("LectureName");
-                creditsItem = new JLabel("Credit");
-                recommendSemester = new JLabel("Rec. Semester");
-            }
-            else {
-                itemPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY));
-                nameItem = new JLabel("LectureName");
-                creditsItem = new JLabel("Credit");
-                recommendSemester = new JLabel("Rec. Semester");
-            }
-            JButton deleteBtn = new JButton();
-            deleteBtn.setPreferredSize(new Dimension(15, 15));
-            deleteBtn.setBorder(new EmptyBorder(5, 5, 5, 5));
-            deleteBtn.setText("clear");
-            JLabel emptyLabel = new JLabel();
-            if(i == 0){
-                deleteBtn.setText("click to clear");
-                deleteBtn.setBorderPainted(false);
-                deleteBtn.setContentAreaFilled(false);
-                deleteBtn.setFocusPainted(false);
-            }
-
-            itemPanel.add(nameItem);
-            itemPanel.add(creditsItem);
-            itemPanel.add(recommendSemester);
-            itemPanel.add(emptyLabel);
-            itemPanel.add(deleteBtn);
-            addedList.add(itemPanel);
-        }
+        JPanel itemPanel = new JPanel(new GridLayout(1, 5, 10, 2));
+        itemPanel.setBackground(Color.WHITE);
+        itemPanel.setPreferredSize(new Dimension(0, 20));
+        itemPanel.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+        idItem = new JLabel("LectureID");
+        nameItem = new JLabel("LectureName");
+        creditsItem = new JLabel("Credit");
+        recSemesterItem = new JLabel("Rec. Semester");
+        JButton deleteBtn = new JButton();
+        deleteBtn.setPreferredSize(new Dimension(15, 15));
+        deleteBtn.setBorder(new EmptyBorder(5, 5, 5, 5));
+        deleteBtn.setText("click to clear");
+        deleteBtn.setBorderPainted(false);
+        deleteBtn.setContentAreaFilled(false);
+        deleteBtn.setFocusPainted(false);
+        itemPanel.add(idItem);
+        itemPanel.add(nameItem);
+        itemPanel.add(creditsItem);
+        itemPanel.add(recSemesterItem);
+        itemPanel.add(deleteBtn);
+        addedList.add(itemPanel);
 
         c.gridx = 0; c.gridy = 0; c.weightx = 1.0; c.weighty = 0.5; c.gridwidth = 8; c.gridheight = 1; c.insets = new Insets(5, 2, 10, 0);
         infoPanel.add(semesterLabel, c);
@@ -99,33 +103,89 @@ public class PlanPage extends JPanel{
         JPanel topPanel = new JPanel(new GridLayout(1, 2));
         topPanel.setBackground(Color.WHITE);
 
-        lectureInput = new JTextField(18);
-        gradeInput = new JTextField(3);
-        creditInput = new JTextField(3);
-        recommendInput = new JTextField(5);
+        lectureInput = new JComboBox<>();
+        lectureIDInput = new JTextField(6);
+        lectureIDInput.setEnabled(false);
+        lectureIDInput.setDisabledTextColor(Color.BLACK);
+        creditInput = new JTextField(1);
+        creditInput.setEnabled(false);
+        creditInput.setDisabledTextColor(Color.BLACK);
+        recommendInput = new JTextField(3);
+        recommendInput.setEnabled(false);
+        recommendInput.setDisabledTextColor(Color.BLACK);
+        lectureInput.setPreferredSize(new Dimension(320, 20));
+        lectureInput.setMaximumRowCount(9);
+        lectureInput.setEditable(true);
+
+        lectureInput.getEditor().getEditorComponent().addKeyListener(new SearchEvent(lectureInput, courseManager));
+        lectureInput.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if(e.getStateChange() != ItemEvent.SELECTED){
+                    return;
+                }
+                String selectedLecture = (String)lectureInput.getSelectedItem();
+                curCourse = courseManager.getCourse(selectedLecture);
+                if(curCourse != null) {
+                    lectureIDInput.setText(curCourse.getCourseID());
+                    creditInput.setText(curCourse.getCredit());
+                    recommendInput.setText(curCourse.getSemester());
+                }
+            }
+        });
 
         JLabel lectureLabel = new JLabel("LectureName");
+        JLabel lectureIDLabel = new JLabel("LectureID");
         JLabel creditLabel = new JLabel("Credit");
         JLabel recSemesterLabel = new JLabel("Rec. Semester");
 
+        Vector<CourseUIModel> inputlist = new Vector<>();
         JButton addBtn = new JButton("+");
+        addBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(inputlist.size() >= 7){
+                    JOptionPane.showMessageDialog(null, "Less than 8 Lectures", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(curCourse == null){
+                    JOptionPane.showMessageDialog(null, "Check your inputs", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                for(CourseUIModel c : inputlist){
+                    if(c.getCourseName().equals(curCourse.getCourseName())){
+                        JOptionPane.showMessageDialog(null, "Already exists:\n" + curCourse.getCourseName(), "error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+                CourseUIModel courseToAdd = new CourseUIModel(CourseUIModel.PLAN, curCourse);
+                inputlist.add(courseToAdd);
+                addedList.removeAll();
+                addedList.add(itemPanel);
+                for(CourseUIModel c : inputlist){
+                    addedList.add(c);
+                    c.addRemoveEvent(inputlist, addedList, itemPanel);
+                }
+                addedList.revalidate();
+                addedList.repaint();
+            }
+        });
 
         JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         inputPanel.setBackground(Color.WHITE);
         inputPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.GRAY));
         inputPanel.add(lectureLabel);
         inputPanel.add(lectureInput);
+        inputPanel.add(lectureIDLabel);
+        inputPanel.add(lectureIDInput);
         inputPanel.add(creditLabel);
         inputPanel.add(creditInput);
         inputPanel.add(recSemesterLabel);
         inputPanel.add(recommendInput);
-
         inputPanel.add(addBtn);
-
         topPanel.add(inputPanel);
 
         inputWrapper.add(topPanel, BorderLayout.NORTH);
-        //inputWrapper.add() search panel
         detailPanel.add(infoPanel, BorderLayout.NORTH);
         detailPanel.add(inputWrapper, BorderLayout.CENTER);
         add(tapPanel, BorderLayout.NORTH);
