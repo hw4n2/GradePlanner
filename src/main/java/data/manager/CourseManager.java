@@ -38,7 +38,8 @@ public class CourseManager {
     public ArrayList<String> searchCourse(String inputText) {
         ArrayList<String> result = new ArrayList<>();
         for(CourseModel c : courseList) {
-            if(c.getCourseName().trim().toLowerCase().contains(inputText.trim().toLowerCase())) {
+            String target = c.getCourseName().trim().toLowerCase();
+            if(target.contains(inputText.trim().toLowerCase())) {
                 result.add(c.toString());
             }
         }

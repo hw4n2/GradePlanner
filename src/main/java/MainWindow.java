@@ -122,6 +122,7 @@ public class MainWindow extends JFrame {
         loginPanel.add(logo);
         loginPanel.add(progName);
         loginPanel.add(wrapper);
+
         return loginPanel;
     }
     private JPanel initPages() {

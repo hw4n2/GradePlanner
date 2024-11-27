@@ -9,7 +9,6 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DetailsPage extends JPanel {
     private JLabel infoLabel;
@@ -17,10 +16,12 @@ public class DetailsPage extends JPanel {
     private JComboBox<String> gradeInput;
     private JTextField creditInput;
     private JTextField lectureIDInput;
+    private CourseModel curCourse;
 
-    JLabel nameItem;
-    JLabel gradeItem;
-    JLabel creditsItem;
+    private JLabel idItem;
+    private JLabel nameItem;
+    private JLabel gradeItem;
+    private JLabel creditsItem;
 
     public DetailsPage(CourseManager courseManager) {
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
@@ -61,45 +62,32 @@ public class DetailsPage extends JPanel {
         c.fill = GridBagConstraints.BOTH;
         JButton saveBtn = new JButton("Save");
 
-        infoLabel = new JLabel("Major Grade 4.1  Earned Credits 12");
+        infoLabel = new JLabel("Major Grade -  Earned Credits -");
 
         JPanel addedList = new JPanel();
         addedList.setBackground(Color.WHITE);
         addedList.setLayout(new GridLayout(8, 1, 5, 0));
-        for (int i = 0; i < 8; i++) {
-            JPanel itemPanel = new JPanel(new GridLayout(1, 4, 15, 2));
-            itemPanel.setBackground(Color.WHITE);
-            itemPanel.setPreferredSize(new Dimension(0, 20));
-            if(i == 0){
-                nameItem = new JLabel("LectureName");
-                gradeItem = new JLabel("Grade");
-                creditsItem = new JLabel("Credit");
-            }
-            else {
-                itemPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.GRAY));
-                nameItem = new JLabel("LectureName");
-                gradeItem = new JLabel("Grade");
-                creditsItem = new JLabel("Credit");
-            }
-            JButton deleteBtn = new JButton();
-            deleteBtn.setPreferredSize(new Dimension(15, 15));
-            deleteBtn.setBorder(new EmptyBorder(5, 5, 5, 5));
-            deleteBtn.setText("clear");
-            if(i == 0){
-                deleteBtn.setText("click to clear");
-                deleteBtn.setBorderPainted(false);
-                deleteBtn.setContentAreaFilled(false);
-                deleteBtn.setFocusPainted(false);
-            }
-            JLabel emptyLabel = new JLabel();
 
-            itemPanel.add(nameItem);
-            itemPanel.add(gradeItem);
-            itemPanel.add(creditsItem);
-            itemPanel.add(emptyLabel);
-            itemPanel.add(deleteBtn);
-            addedList.add(itemPanel);
-        }
+        JPanel itemPanel = new JPanel(new GridLayout(1, 5, 10, 2));
+        itemPanel.setBackground(Color.WHITE);
+        itemPanel.setPreferredSize(new Dimension(0, 20));
+        idItem = new JLabel("LectureID");
+        nameItem = new JLabel("LectureName");
+        gradeItem = new JLabel("Grade");
+        creditsItem = new JLabel("Credit");
+        JButton deleteBtn = new JButton();
+        deleteBtn.setPreferredSize(new Dimension(15, 15));
+        deleteBtn.setBorder(new EmptyBorder(5, 5, 5, 5));
+        deleteBtn.setText("click to clear");
+        deleteBtn.setBorderPainted(false);
+        deleteBtn.setContentAreaFilled(false);
+        deleteBtn.setFocusPainted(false);
+        itemPanel.add(idItem);
+        itemPanel.add(nameItem);
+        itemPanel.add(creditsItem);
+        itemPanel.add(gradeItem);
+        itemPanel.add(deleteBtn);
+        addedList.add(itemPanel);
 
         c.gridx = 0; c.gridy = 0; c.weightx = 1.0; c.weighty = 0.5; c.gridwidth = 8; c.gridheight = 1; c.insets = new Insets(5, 2, 10, 0);
         infoPanel.add(semesterLabel, c);
@@ -115,10 +103,10 @@ public class DetailsPage extends JPanel {
 
         lectureInput = new JComboBox<>();
         gradeInput = new JComboBox<>();
-        lectureIDInput = new JTextField(5);
+        lectureIDInput = new JTextField(6);
         lectureIDInput.setEnabled(false);
         lectureIDInput.setDisabledTextColor(Color.BLACK);
-        creditInput = new JTextField(3);
+        creditInput = new JTextField(1);
         creditInput.setEnabled(false);
         creditInput.setDisabledTextColor(Color.BLACK);
         lectureInput.setPreferredSize(new Dimension(320, 20));
@@ -126,15 +114,10 @@ public class DetailsPage extends JPanel {
         lectureInput.setEditable(true);
 
         gradeInput.setMaximumRowCount(9);
-        gradeInput.addItem("A+");
-        gradeInput.addItem("A0");
-        gradeInput.addItem("B+");
-        gradeInput.addItem("B0");
-        gradeInput.addItem("C+");
-        gradeInput.addItem("C0");
-        gradeInput.addItem("D+");
-        gradeInput.addItem("D0");
-        gradeInput.addItem("F");
+        final String[] gradeList = { "A+", "A0", "B+", "B0", "C+", "C0", "D+", "D0", "F"};
+        for(String s : gradeList) {
+            gradeInput.addItem(s);
+        }
 
         lectureInput.getEditor().getEditorComponent().addKeyListener(new SearchEvent(lectureInput, courseManager));
         lectureInput.addItemListener(new ItemListener() {
@@ -144,10 +127,10 @@ public class DetailsPage extends JPanel {
                     return;
                 }
                 String selectedLecture = (String)lectureInput.getSelectedItem();
-                CourseModel course = courseManager.getCourse(selectedLecture);
-                if(course != null) {
-                    lectureIDInput.setText(course.getCourseID());
-                    creditInput.setText(course.getCredit());
+                curCourse = courseManager.getCourse(selectedLecture);
+                if(curCourse != null) {
+                    lectureIDInput.setText(curCourse.getCourseID());
+                    creditInput.setText(curCourse.getCredit());
                 }
             }
         });
@@ -157,7 +140,65 @@ public class DetailsPage extends JPanel {
         JLabel gradeLabel = new JLabel("Grade");
         JLabel creditLabel = new JLabel("Credit");
 
+        Vector<CourseUIModel> inputlist = new Vector<>(7);
         JButton addBtn = new JButton("+");
+        addBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(inputlist.size() >= 7){
+                    JOptionPane.showMessageDialog(null, "Less than 8 Lectures", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(curCourse == null){
+                    JOptionPane.showMessageDialog(null, "Check your inputs", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                for(CourseUIModel c : inputlist){
+                    if(c.getCourseName().equals(curCourse.getCourseName())){
+                        JOptionPane.showMessageDialog(null, "Already exists:\n" + curCourse.getCourseName(), "error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+                CourseUIModel courseToAdd;
+                try{
+                    courseToAdd = new CourseUIModel(CourseUIModel.DETAIL, curCourse, gradeInput.getSelectedItem().toString());
+                } catch(NullPointerException ne){
+                    JOptionPane.showMessageDialog(null, "Check your grade", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                inputlist.add(courseToAdd);
+                addedList.removeAll();
+                addedList.add(itemPanel);
+                Vector<JButton> delbtnList = new Vector<>();
+                for(CourseUIModel c : inputlist){
+                    addedList.add(c);
+                    delbtnList.add(c.getButton());
+                }
+//                for(CourseUIModel c : inputlist){
+//                    c.getButton().addActionListener(new ActionListener() {
+//                        @Override
+//                        public void actionPerformed(ActionEvent e) {
+//                            Iterator<CourseUIModel> iter = inputlist.iterator();
+//                            while(iter.hasNext()){
+//                                if(iter.next().getCourseName().equals(nameItem.getText())) {
+//                                    iter.remove();
+//                                    break;
+//                                }
+//                            }
+//                            addedList.removeAll();
+//                            addedList.add(itemPanel);
+//                            for(CourseUIModel newC : inputlist){
+//                                addedList.add(newC);
+//                            }
+//                            addedList.revalidate();
+//                            addedList.repaint();
+//                        }
+//                    });
+//                }
+                addedList.revalidate();
+                addedList.repaint();
+            }
+        });
 
         JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         inputPanel.setBackground(Color.WHITE);
@@ -171,7 +212,7 @@ public class DetailsPage extends JPanel {
         inputPanel.add(gradeLabel);
         inputPanel.add(gradeInput);
         inputPanel.add(addBtn);
-        inputPanel.setBorder(new EmptyBorder(1, 0, 0, 0));
+        inputPanel.setBorder(new MatteBorder(1, 0, 0, 0, Color.GRAY));
         topPanel.add(inputPanel);
 
         inputWrapper.add(topPanel);
