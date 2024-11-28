@@ -55,7 +55,7 @@ public class CourseUIModel extends JPanel {
         return deleteBtn;
     }
 
-    public void addRemoveEvent(Vector<CourseUIModel> v, JPanel parentPanel, JPanel titlePanel) {
+    public void addRemoveEvent(ArrayList<CourseUIModel> v, JPanel parentPanel, JPanel titlePanel) {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

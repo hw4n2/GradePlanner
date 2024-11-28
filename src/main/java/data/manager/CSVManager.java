@@ -14,6 +14,9 @@ class CSVManager {
     private File usersfile = new File("src/main/userdata/users.csv");
     private File coursefile;
 
+    private String[] detailTitle = { "d1-1", "d1-2", "d2-1", "d2-2", "d3-1", "d3-2", "d4-1", "d4-2" };
+    private String[] planTitle = { "p1-1", "p1-2", "p2-1", "p2-2", "p3-1", "p3-2", "p4-1", "p4-2" };
+
     CSVManager() {
         try {
             if(usersfile.createNewFile()){
@@ -28,12 +31,43 @@ class CSVManager {
         }
     }
 
+    private void createUserData(String id) {
+        File userDir = new File("src/main/userdata/" + id);
+        if(userDir.mkdir()) System.out.println("[UserFile Created] " + id);
+        File userfile;
+        try{
+            for(String s : detailTitle){
+                userfile = new File(userDir + "/" + s + ".csv");
+                if(userfile.createNewFile()){
+                    bw = new BufferedWriter(new FileWriter(userfile));
+                    bw.write("CourseID,CourseName,Credit,Grade");
+                    bw.newLine();
+                    bw.close();
+                }
+            }
+            for(String s : planTitle){
+                userfile = new File(userDir + "/" + s + ".csv");
+                if(userfile.createNewFile()){
+                    bw = new BufferedWriter(new FileWriter(userfile));
+                    bw.write("CourseID,CourseName,Credit,Semester");
+                    bw.newLine();
+                    bw.close();
+                }
+            }
+        } catch(IOException e){
+
+        }
+        System.out.println("Userdata files has been created");
+    }
+
     UserModel createUser(String id, String password) {
         try {
             bw = new BufferedWriter(new FileWriter(usersfile, true));
             bw.write(id + "," + password + "," + id);
             bw.newLine();
             bw.close();
+            createUserData(id);
+
             return new UserModel(id, id);
         } catch(IOException e){
             e.printStackTrace();

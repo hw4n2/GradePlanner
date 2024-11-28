@@ -21,10 +21,12 @@ public class PlanPage extends JPanel{
     private JTextField recommendInput;
     private CourseModel curCourse;
 
+    private JPanel itemPanel;
     private JLabel idItem;
     private JLabel nameItem;
     private JLabel creditsItem;
     private JLabel recSemesterItem;
+    private ArrayList<CourseUIModel> inputlist;
 
     public PlanPage(CourseManager courseManager) {
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
@@ -63,13 +65,19 @@ public class PlanPage extends JPanel{
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         JButton saveBtn = new JButton("Save");
+        saveBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
 
         infoLabel = new JLabel("Credits - / 19");
 
         JPanel addedList = new JPanel();
         addedList.setBackground(Color.WHITE);
         addedList.setLayout(new GridLayout(8, 1, 5, 0));
-        JPanel itemPanel = new JPanel(new GridLayout(1, 5, 10, 2));
+        itemPanel = new JPanel(new GridLayout(1, 5, 10, 2));
         itemPanel.setBackground(Color.WHITE);
         itemPanel.setPreferredSize(new Dimension(0, 20));
         itemPanel.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
@@ -139,7 +147,7 @@ public class PlanPage extends JPanel{
         JLabel creditLabel = new JLabel("Credit");
         JLabel recSemesterLabel = new JLabel("Rec. Semester");
 
-        Vector<CourseUIModel> inputlist = new Vector<>();
+        inputlist = new ArrayList<>();
         JButton addBtn = new JButton("+");
         addBtn.addActionListener(new ActionListener() {
             @Override

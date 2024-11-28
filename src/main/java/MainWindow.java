@@ -77,7 +77,7 @@ public class MainWindow extends JFrame {
                 String id = loginIdInput.getText();
                 String pw = new String(loginpwInput.getPassword());
                 if((loginUser = userManager.login(id, pw)) == null){
-                    System.out.println("Login Failed");
+                    JOptionPane.showMessageDialog(null, "Login failed", "error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
                     System.out.println("[sign in] " + loginUser.getStudentID());
@@ -86,6 +86,7 @@ public class MainWindow extends JFrame {
                     updateCard("Lobby");
                     userBtn.setText("User " + loginUser.getName());
                     courseManager.setCourseList(loginUser.getEnrollment());
+                    JOptionPane.showMessageDialog(null, "Welcome " + loginUser.getName(), "login", JOptionPane.PLAIN_MESSAGE);
                 }
             }
         });
