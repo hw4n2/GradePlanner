@@ -51,11 +51,14 @@ public class CourseUIModel extends JPanel {
         return nameItem.getText();
     }
 
-    public JButton getButton() {
-        return deleteBtn;
+    public String[] getCourseData(int modelType){
+        String[] data = null;
+        if(modelType == DETAIL) data = new String[] {idItem.getText(), nameItem.getText(), creditItem.getText(), gradeItem.getText() };
+        else if(modelType == PLAN) data = new String[] {idItem.getText(), nameItem.getText(), creditItem.getText(), recommendItem.getText() };
+        return data;
     }
 
-    public void addRemoveEvent(ArrayList<CourseUIModel> v, JPanel parentPanel, JPanel titlePanel) {
+    public void addRemoveEvent(java.util.List<CourseUIModel> v, JPanel parentPanel, JPanel titlePanel) {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

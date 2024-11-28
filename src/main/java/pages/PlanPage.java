@@ -26,9 +26,9 @@ public class PlanPage extends JPanel{
     private JLabel nameItem;
     private JLabel creditsItem;
     private JLabel recSemesterItem;
-    private ArrayList<CourseUIModel> inputlist;
+    private ArrayList<CourseUIModel> inputlist = null;
 
-    public PlanPage(CourseManager courseManager) {
+    public PlanPage(UserModel user, CourseManager courseManager) {
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
         Border lineBorder = new LineBorder(Color.BLACK);
         setLayout(new BorderLayout());
@@ -68,7 +68,16 @@ public class PlanPage extends JPanel{
         saveBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(semesterLabel.getText().equals("- Year - Semester")){
+                    JOptionPane.showMessageDialog(null, "Choose Semester first", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(inputlist == null || inputlist.isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Add Lecture first", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                String sem = semesterLabel.getText().charAt(0) + "-" + semesterLabel.getText().charAt(7);
+                courseManager.saveCourseList(inputlist, user.getStudentID(), sem, CourseUIModel.PLAN);
             }
         });
 
@@ -152,6 +161,10 @@ public class PlanPage extends JPanel{
         addBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if(semesterLabel.getText().equals("- Year - Semester")){
+                    JOptionPane.showMessageDialog(null, "Choose Semester first", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 if(inputlist.size() >= 7){
                     JOptionPane.showMessageDialog(null, "Less than 8 Lectures", "error", JOptionPane.ERROR_MESSAGE);
                     return;

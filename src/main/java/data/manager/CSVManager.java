@@ -12,6 +12,7 @@ class CSVManager {
     private BufferedWriter bw = null;
     private BufferedReader br = null;
     private File usersfile = new File("src/main/userdata/users.csv");
+    private String userdataPath = "src/main/userdata/";
     private File coursefile;
 
     private String[] detailTitle = { "d1-1", "d1-2", "d2-1", "d2-2", "d3-1", "d3-2", "d4-1", "d4-2" };
@@ -32,30 +33,21 @@ class CSVManager {
     }
 
     private void createUserData(String id) {
-        File userDir = new File("src/main/userdata/" + id);
+        File userDir = new File(userdataPath + id);
         if(userDir.mkdir()) System.out.println("[UserFile Created] " + id);
         File userfile;
         try{
             for(String s : detailTitle){
                 userfile = new File(userDir + "/" + s + ".csv");
-                if(userfile.createNewFile()){
-                    bw = new BufferedWriter(new FileWriter(userfile));
-                    bw.write("CourseID,CourseName,Credit,Grade");
-                    bw.newLine();
-                    bw.close();
-                }
+                userfile.createNewFile();
             }
             for(String s : planTitle){
                 userfile = new File(userDir + "/" + s + ".csv");
-                if(userfile.createNewFile()){
-                    bw = new BufferedWriter(new FileWriter(userfile));
-                    bw.write("CourseID,CourseName,Credit,Semester");
-                    bw.newLine();
-                    bw.close();
-                }
+                userfile.createNewFile();
             }
         } catch(IOException e){
-
+            JOptionPane.showMessageDialog(null, "Error occured\nTry again", "error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         System.out.println("Userdata files has been created");
     }
@@ -122,5 +114,48 @@ class CSVManager {
         }
         coursefile = null;
         return courseList;
+    }
+
+    void writeCourseData(java.util.List<String[]> data, String userID, String semester, int modelType){
+        String lastItem = null;
+        try{
+            if(modelType == CourseUIModel.DETAIL) {
+                lastItem = "Grade";
+                bw = new BufferedWriter(new FileWriter(userdataPath + userID + "/" + "d" + semester + ".csv"));
+            }
+            else if(modelType == CourseUIModel.PLAN) {
+                lastItem = "Semester";
+                bw = new BufferedWriter(new FileWriter(userdataPath + userID + "/" + "p" + semester + ".csv"));
+            }
+        } catch(IOException e){
+            JOptionPane.showMessageDialog(null, "Cannot find userdata", "error", JOptionPane.ERROR_MESSAGE);
+            System.out.println(bw.getClass().getName());
+            return;
+        }
+        addHeader("CourseID,CourseName,Credit," + lastItem);
+        for(String[] item : data) {
+            try{
+                bw.write(item[0] + "," + item[1] + "," + item[2] + "," + item[3]);
+                bw.newLine();
+            } catch(IOException e){
+                JOptionPane.showMessageDialog(null, "Writing CSVdata failed", "error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        try{
+            bw.close();
+        } catch(IOException e){
+            return;
+        }
+        JOptionPane.showMessageDialog(null, "Save Successed", "success", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private void addHeader(String header){
+        try{
+            bw.write(header);
+            bw.newLine();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Writing CSVHeader failed", "error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

@@ -59,4 +59,12 @@ public class CourseManager {
         result.sort(startsCompare);
         return result;
     }
+
+    public void saveCourseList(java.util.List<CourseUIModel> list, String userID, String semester, int modelType){
+        ArrayList<String[]> courseData = new ArrayList<>();
+        for(CourseUIModel c : list) {
+            courseData.add(c.getCourseData(modelType));
+        }
+        csvManager.writeCourseData(courseData, userID, semester, modelType);
+    }
 }

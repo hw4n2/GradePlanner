@@ -86,7 +86,6 @@ public class MainWindow extends JFrame {
                     updateCard("Lobby");
                     userBtn.setText("User " + loginUser.getName());
                     courseManager.setCourseList(loginUser.getEnrollment());
-                    JOptionPane.showMessageDialog(null, "Welcome " + loginUser.getName(), "login", JOptionPane.PLAIN_MESSAGE);
                 }
             }
         });
@@ -191,8 +190,8 @@ public class MainWindow extends JFrame {
         lobby = new LobbyPage(btnList);
         setting = new SettingPage();
         ranking = new RankingPage();
-        details = new DetailsPage(courseManager);
-        plan = new PlanPage(courseManager);
+        details = new DetailsPage(loginUser, courseManager);
+        plan = new PlanPage(loginUser, courseManager);
         pagePanel.add(lobby, "Lobby");
         pagePanel.add(setting, "Settings");
         pagePanel.add(ranking, "Users");
