@@ -14,6 +14,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 public class PlanPage extends JPanel{
+    public static final boolean isModified = false;
+    private int listsize;
+
     private JLabel infoLabel;
     private JComboBox<String> lectureInput;
     private JTextField lectureIDInput;
@@ -27,6 +30,7 @@ public class PlanPage extends JPanel{
     private JLabel creditsItem;
     private JLabel recSemesterItem;
     private ArrayList<CourseUIModel> inputlist = null;
+    private JPanel addedList;
 
     public PlanPage(UserModel user, CourseManager courseManager) {
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
@@ -47,6 +51,9 @@ public class PlanPage extends JPanel{
                 public void actionPerformed(ActionEvent e){
                     String semesterText = btn.getText().charAt(0) + " Year " + btn.getText().charAt(4) + " Semester";
                     semesterLabel.setText(semesterText);
+                    inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.DETAIL);
+                    setCourseList();
+                    listsize = inputlist.size();
                 }
             });
             tapPanel.add(btn);
@@ -72,7 +79,11 @@ public class PlanPage extends JPanel{
                     JOptionPane.showMessageDialog(null, "Choose Semester first", "error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                if(inputlist == null || inputlist.isEmpty()){
+                if(listsize == inputlist.size()){
+                    JOptionPane.showMessageDialog(null, "Nothing changed", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(isModified || (inputlist.isEmpty() || inputlist == null)){
                     JOptionPane.showMessageDialog(null, "Add Lecture first", "error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -83,7 +94,7 @@ public class PlanPage extends JPanel{
 
         infoLabel = new JLabel("Credits - / 19");
 
-        JPanel addedList = new JPanel();
+        addedList = new JPanel();
         addedList.setBackground(Color.WHITE);
         addedList.setLayout(new GridLayout(8, 1, 5, 0));
         itemPanel = new JPanel(new GridLayout(1, 5, 10, 2));
@@ -181,14 +192,7 @@ public class PlanPage extends JPanel{
                 }
                 CourseUIModel courseToAdd = new CourseUIModel(CourseUIModel.PLAN, curCourse);
                 inputlist.add(courseToAdd);
-                addedList.removeAll();
-                addedList.add(itemPanel);
-                for(CourseUIModel c : inputlist){
-                    addedList.add(c);
-                    c.addRemoveEvent(inputlist, addedList, itemPanel);
-                }
-                addedList.revalidate();
-                addedList.repaint();
+                setCourseList();
             }
         });
 
@@ -211,5 +215,16 @@ public class PlanPage extends JPanel{
         detailPanel.add(inputWrapper, BorderLayout.CENTER);
         add(tapPanel, BorderLayout.NORTH);
         add(detailPanel, BorderLayout.CENTER);
+    }
+
+    private void setCourseList(){
+        addedList.removeAll();
+        addedList.add(itemPanel);
+        for(CourseUIModel c : inputlist){
+            addedList.add(c);
+            c.addRemoveEvent(inputlist, addedList, itemPanel);
+        }
+        addedList.revalidate();
+        addedList.repaint();
     }
 }

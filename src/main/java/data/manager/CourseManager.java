@@ -67,4 +67,10 @@ public class CourseManager {
         }
         csvManager.writeCourseData(courseData, userID, semester, modelType);
     }
+
+    public ArrayList<CourseUIModel> loadCourseList(String userID, String semester, int modelType) {
+        ArrayList<CourseUIModel> list = csvManager.readCourseData(userID, semester, modelType);
+        if(list == null) return null;
+        else return list;
+    }
 }
