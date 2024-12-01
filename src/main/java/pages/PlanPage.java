@@ -51,7 +51,7 @@ public class PlanPage extends JPanel{
                 public void actionPerformed(ActionEvent e){
                     String semesterText = btn.getText().charAt(0) + " Year " + btn.getText().charAt(4) + " Semester";
                     semesterLabel.setText(semesterText);
-                    inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.DETAIL);
+                    inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.PLAN);
                     setCourseList();
                     listsize = inputlist.size();
                 }

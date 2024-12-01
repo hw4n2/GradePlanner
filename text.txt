@@ -5,4 +5,5 @@
 과목명 입력 이벤트와 item 클릭 이벤트가 중복 호출되는 문제
 
 ismodified 플래그 써서 삭제후 저장할때 에러 안띄우게 하기
-plan에서 detail 과목정보를 불러오는 문제
+
+clear누르고 save했을때 optionpane 안뜨는 문제
