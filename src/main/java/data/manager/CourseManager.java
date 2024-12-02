@@ -10,6 +10,11 @@ public class CourseManager {
     CSVManager csvManager;
     private ArrayList<CourseModel> courseList;
 
+    public static final int NOT_MODIFIED = 0;
+    public static final int MODIFIED = 1;
+    public static final int BOTH_EMPTY = 2;
+
+
     public CourseManager() {
         csvManager = new CSVManager();
         courseList = new ArrayList<>(40);
@@ -72,5 +77,17 @@ public class CourseManager {
         ArrayList<CourseUIModel> list = csvManager.readCourseData(userID, semester, modelType);
         if(list == null) return null;
         else return list;
+    }
+
+    public int isModified(java.util.List<CourseUIModel> newlist, java.util.List<String> oldlist){
+        if(newlist.size() != oldlist.size()) {
+            return MODIFIED;
+        }
+        if(newlist.isEmpty()) return BOTH_EMPTY;
+
+        for(CourseUIModel c : newlist) {
+            if(!oldlist.contains(c.getCourseName())) return MODIFIED;
+        }
+        return NOT_MODIFIED;
     }
 }

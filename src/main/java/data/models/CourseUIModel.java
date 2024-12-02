@@ -78,8 +78,8 @@ public class CourseUIModel extends JPanel {
 
     public String[] getCourseData(int modelType){
         String[] data = null;
-        if(modelType == DETAIL) data = new String[] {idItem.getText(), nameItem.getText(), creditItem.getText(), gradeItem.getText() };
-        else if(modelType == PLAN) data = new String[] {idItem.getText(), nameItem.getText(), creditItem.getText(), recommendItem.getText() };
+        if(modelType == DETAIL) data = new String[] { idItem.getText(), nameItem.getText(), creditItem.getText(), gradeItem.getText() };
+        else if(modelType == PLAN) data = new String[] { idItem.getText(), nameItem.getText(), creditItem.getText(), recommendItem.getText() };
         return data;
     }
 
@@ -105,6 +105,7 @@ public class CourseUIModel extends JPanel {
             }
         });
     }
+
 
 }
 

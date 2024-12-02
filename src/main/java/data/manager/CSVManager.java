@@ -130,6 +130,7 @@ class CSVManager {
             if(data.isEmpty()){
                 bw.write("");
                 bw.close();
+                JOptionPane.showMessageDialog(null, "Save Successed", "success", JOptionPane.PLAIN_MESSAGE);
                 return;
             }
             addHeader("CourseID,CourseName,Credit," + lastItem);

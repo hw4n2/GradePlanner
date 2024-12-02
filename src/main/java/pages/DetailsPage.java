@@ -11,9 +11,6 @@ import javax.swing.border.*;
 import java.util.*;
 
 public class DetailsPage extends JPanel {
-    public static boolean isModified = false;
-    private int listsize;
-
     private JLabel infoLabel;
     private JComboBox<String> lectureInput;
     private JComboBox<String> gradeInput;
@@ -42,6 +39,7 @@ public class DetailsPage extends JPanel {
         JLabel semesterLabel = new JLabel("- Year - Semester");
 
         String[] semester = { "1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2" };
+        ArrayList<String> listToCmp = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             JButton btn = new JButton(semester[i]);
             btn.addActionListener(new ActionListener() {
@@ -51,7 +49,7 @@ public class DetailsPage extends JPanel {
                     semesterLabel.setText(semesterText);
                     inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.DETAIL);
                     setCourseList();
-                    listsize = inputlist.size();
+                    setOldList(listToCmp);
                 }
             });
             tapPanel.add(btn);
@@ -77,17 +75,19 @@ public class DetailsPage extends JPanel {
                     JOptionPane.showMessageDialog(null, "Choose Semester first", "error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                if(listsize == inputlist.size()){
-                    JOptionPane.showMessageDialog(null, "Nothing changed", "error", JOptionPane.ERROR_MESSAGE);
+                int modifyFlag = courseManager.isModified(inputlist, listToCmp);
+
+                if(modifyFlag == CourseManager.BOTH_EMPTY){
+                    JOptionPane.showMessageDialog(null, "Add Lecture first", "error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                if(isModified && (inputlist.isEmpty() || inputlist == null)){
-                    JOptionPane.showMessageDialog(null, "Add Lecture first", "error", JOptionPane.ERROR_MESSAGE);
+                if(modifyFlag == CourseManager.NOT_MODIFIED){
+                    JOptionPane.showMessageDialog(null, "Nothing changed", "error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 String sem = semesterLabel.getText().charAt(0) + "-" + semesterLabel.getText().charAt(7);
                 courseManager.saveCourseList(inputlist, user.getStudentID(), sem, CourseUIModel.DETAIL);
-                isModified = false;
+                setOldList(listToCmp);
             }
         });
 
@@ -162,7 +162,6 @@ public class DetailsPage extends JPanel {
                     lectureIDInput.setText(curCourse.getCourseID());
                     creditInput.setText(curCourse.getCredit());
                 }
-                isModified = true;
             }
         });
 
@@ -203,7 +202,6 @@ public class DetailsPage extends JPanel {
                 }
                 inputlist.add(courseToAdd);
                 setCourseList();
-                isModified = true;
             }
         });
 
@@ -237,5 +235,12 @@ public class DetailsPage extends JPanel {
         }
         addedList.revalidate();
         addedList.repaint();
+    }
+
+    private void setOldList(ArrayList<String> oldList){
+        oldList.clear();
+        for(CourseUIModel c : inputlist){
+            oldList.add(c.getCourseName());
+        }
     }
 }
