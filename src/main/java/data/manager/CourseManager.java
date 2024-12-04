@@ -3,8 +3,6 @@ package data.manager;
 import data.models.*;
 import java.util.*;
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
 
 public class CourseManager {
     CSVManager csvManager;
@@ -78,13 +76,15 @@ public class CourseManager {
         else return list;
     }
 
-    public double getGradeAverage(java.util.List<CourseUIModel> list){
-        double result = 0;
+    public String[] calcGradeAverage(java.util.List<CourseUIModel> list){
+        double sum = 0, credit = 0;
+        String[] course = null;
         for(CourseUIModel c : list){
-            result += gradeConverter(c.getCourseGrade());
+            course = c.getCourseData(CourseUIModel.DETAIL);
+            sum += gradeConverter(course[3]) * Integer.parseInt(course[2]);
+            credit += Integer.parseInt(course[2]);
         }
-        result /= list.size();
-        return result;
+        return new String[]{String.format("%.2f", sum / credit), Integer.toString((int)credit)};
     }
 
 //    public double getGradeAverage(String userID){

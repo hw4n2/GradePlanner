@@ -17,6 +17,7 @@ public class DetailsPage extends JPanel {
     private JTextField creditInput;
     private JTextField lectureIDInput;
     private CourseModel curCourse;
+    private CourseManager courseManager;
 
     private JPanel itemPanel;
     private JLabel idItem;
@@ -26,7 +27,8 @@ public class DetailsPage extends JPanel {
     private ArrayList<CourseUIModel> inputlist = null;
     private JPanel addedList;
 
-    public DetailsPage(UserModel user, CourseManager courseManager) {
+    public DetailsPage(UserModel user, CourseManager cm) {
+        this.courseManager = cm;
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
         Border lineBorder = new LineBorder(Color.BLACK);
         setLayout(new BorderLayout());
@@ -52,7 +54,7 @@ public class DetailsPage extends JPanel {
                     inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.DETAIL);
                     setCourseList();
                     setOldList(listToCmp);
-                    System.out.println(courseManager.getGradeAverage(inputlist));
+                    setInfoLabel();
                 }
             });
             tapPanel.add(btn);
@@ -91,6 +93,7 @@ public class DetailsPage extends JPanel {
                 String sem = semesterLabel.getText().charAt(0) + "-" + semesterLabel.getText().charAt(7);
                 courseManager.saveCourseList(inputlist, user.getStudentID(), sem, CourseUIModel.DETAIL);
                 setOldList(listToCmp);
+                setInfoLabel();
             }
         });
 
@@ -190,6 +193,13 @@ public class DetailsPage extends JPanel {
                     JOptionPane.showMessageDialog(null, "Check your inputs", "error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                if(!inputlist.isEmpty()){
+                    int credit = Integer.parseInt(courseManager.calcGradeAverage(inputlist)[1]);
+                    if(credit + Integer.parseInt(creditInput.getText()) > 21){
+                        JOptionPane.showMessageDialog(null, "Maximum credit 21", "error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
                 for(CourseUIModel c : inputlist){
                     if(c.getCourseName().equals(curCourse.getCourseName())){
                         JOptionPane.showMessageDialog(null, "Already exists:\n" + curCourse.getCourseName(), "error", JOptionPane.ERROR_MESSAGE);
@@ -205,6 +215,7 @@ public class DetailsPage extends JPanel {
                 }
                 inputlist.add(courseToAdd);
                 setCourseList();
+                setInfoLabel();
             }
         });
 
@@ -234,7 +245,7 @@ public class DetailsPage extends JPanel {
         addedList.add(itemPanel);
         for(CourseUIModel c : inputlist){
             addedList.add(c);
-            c.addRemoveEvent(inputlist, addedList, itemPanel);
+            c.addRemoveEvent(inputlist, addedList, itemPanel, courseManager, infoLabel, CourseUIModel.DETAIL);
         }
         addedList.revalidate();
         addedList.repaint();
@@ -245,5 +256,11 @@ public class DetailsPage extends JPanel {
         for(CourseUIModel c : inputlist){
             oldList.add(c.getCourseName());
         }
+    }
+
+    private void setInfoLabel(){
+        String[] infos = courseManager.calcGradeAverage(inputlist);
+        if(!inputlist.isEmpty()) infoLabel.setText("Major Grade " + infos[0] + " Earned Credits " + infos[1]);
+        else infoLabel.setText("Major Grade -  Earned Credits -");
     }
 }

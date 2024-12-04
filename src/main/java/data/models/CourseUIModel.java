@@ -1,5 +1,6 @@
 package data.models;
 
+import data.manager.*;
 import pages.*;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -76,11 +77,6 @@ public class CourseUIModel extends JPanel {
         return nameItem.getText();
     }
 
-    public String getCourseGrade(){
-        if(gradeItem.getText().isEmpty()) return null;
-        else return gradeItem.getText();
-    }
-
     public String[] getCourseData(int modelType){
         String[] data = null;
         if(modelType == DETAIL) data = new String[] { idItem.getText(), nameItem.getText(), creditItem.getText(), gradeItem.getText() };
@@ -88,7 +84,7 @@ public class CourseUIModel extends JPanel {
         return data;
     }
 
-    public void addRemoveEvent(java.util.List<CourseUIModel> v, JPanel parentPanel, JPanel titlePanel) {
+    public void addRemoveEvent(java.util.List<CourseUIModel> v, JPanel parentPanel, JPanel titlePanel, CourseManager cm, JLabel infoLabel, int flag) {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -107,6 +103,16 @@ public class CourseUIModel extends JPanel {
                 }
                 parentPanel.revalidate();
                 parentPanel.repaint();
+
+                String[] infos = cm.calcGradeAverage(v);
+                if(flag == DETAIL) {
+                    if(!v.isEmpty()) infoLabel.setText("Major Grade " + infos[0] + " Earned Credits " + infos[1]);
+                    else infoLabel.setText("Major Grade -  Earned Credits -");
+                }
+                else if(flag == PLAN) {
+                    if(!v.isEmpty()) infoLabel.setText("Credits " + infos[1] + " / 21");
+                    else infoLabel.setText("Credits - / 21");
+                }
             }
         });
     }
