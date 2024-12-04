@@ -76,6 +76,11 @@ public class CourseUIModel extends JPanel {
         return nameItem.getText();
     }
 
+    public String getCourseGrade(){
+        if(gradeItem.getText().isEmpty()) return null;
+        else return gradeItem.getText();
+    }
+
     public String[] getCourseData(int modelType){
         String[] data = null;
         if(modelType == DETAIL) data = new String[] { idItem.getText(), nameItem.getText(), creditItem.getText(), gradeItem.getText() };

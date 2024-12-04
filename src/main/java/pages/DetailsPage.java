@@ -37,6 +37,8 @@ public class DetailsPage extends JPanel {
         tapPanel.setBackground(Color.WHITE);
 
         JLabel semesterLabel = new JLabel("- Year - Semester");
+        Font tmp = semesterLabel.getFont().deriveFont(24f);
+        semesterLabel.setFont(tmp);
 
         String[] semester = { "1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2" };
         ArrayList<String> listToCmp = new ArrayList<>();
@@ -50,6 +52,7 @@ public class DetailsPage extends JPanel {
                     inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.DETAIL);
                     setCourseList();
                     setOldList(listToCmp);
+                    System.out.println(courseManager.getGradeAverage(inputlist));
                 }
             });
             tapPanel.add(btn);

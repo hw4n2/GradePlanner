@@ -14,7 +14,6 @@ public class CourseManager {
     public static final int MODIFIED = 1;
     public static final int BOTH_EMPTY = 2;
 
-
     public CourseManager() {
         csvManager = new CSVManager();
         courseList = new ArrayList<>(40);
@@ -79,6 +78,19 @@ public class CourseManager {
         else return list;
     }
 
+    public double getGradeAverage(java.util.List<CourseUIModel> list){
+        double result = 0;
+        for(CourseUIModel c : list){
+            result += gradeConverter(c.getCourseGrade());
+        }
+        result /= list.size();
+        return result;
+    }
+
+//    public double getGradeAverage(String userID){
+//
+//    }
+
     public int isModified(java.util.List<CourseUIModel> newlist, java.util.List<String> oldlist){
         if(newlist.size() != oldlist.size()) {
             return MODIFIED;
@@ -89,5 +101,20 @@ public class CourseManager {
             if(!oldlist.contains(c.getCourseName())) return MODIFIED;
         }
         return NOT_MODIFIED;
+    }
+
+    private double gradeConverter(String grade){
+        switch(grade){
+            case "A+": return 4.5;
+            case "A0": return 4.0;
+            case "B+": return 3.5;
+            case "B0": return 3.0;
+            case "C+": return 2.5;
+            case "C0": return 2.0;
+            case "D+": return 1.5;
+            case "D0": return 1.0;
+            case "F": return 0;
+            default: return -1;
+        }
     }
 }
