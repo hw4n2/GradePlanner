@@ -94,7 +94,7 @@ class CSVManager {
         return createUser(id, password);
     }
 
-    ArrayList<CourseModel> loadCourseList(int enrollment) {
+    ArrayList<CourseModel> loadAllCourseList(int enrollment) {
         if(enrollment < 19 || enrollment > 24) return null;
         coursefile = new File("src/main/resources/curriculum/" + enrollment + "curriculum.csv");
         ArrayList<CourseModel> courseList = new ArrayList<>(40);

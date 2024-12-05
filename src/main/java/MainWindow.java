@@ -21,10 +21,10 @@ public class MainWindow extends JFrame {
     private JPanel details;
     private JPanel plan;
 
-    private UserModel loginUser;
-    private CourseModel courseModel;
-    private UserManager userManager;;
-    private CourseManager courseManager;
+    private UserModel loginUser = null;
+    private CourseModel courseModel = null;
+    private UserManager userManager = null;
+    private CourseManager courseManager = null;
 
     private MainWindow(){
         frame = getContentPane();
@@ -187,7 +187,7 @@ public class MainWindow extends JFrame {
         mainPanel.add(userPanel, BorderLayout.NORTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        lobby = new LobbyPage(btnList);
+        lobby = new LobbyPage(loginUser, courseManager, btnList);
         setting = new SettingPage();
         ranking = new RankingPage();
         details = new DetailsPage(loginUser, courseManager);

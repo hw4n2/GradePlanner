@@ -20,7 +20,7 @@ public class CourseManager {
     public void setCourseList(int enrollment) {
         if(courseList == null) courseList = new ArrayList<>(40);
         courseList.clear();
-        if((courseList = csvManager.loadCourseList(enrollment)) == null) {
+        if((courseList = csvManager.loadAllCourseList(enrollment)) == null) {
             JOptionPane.showMessageDialog(null,
                     "Only for undergraduate students enrolled in 2019-2024", "course load error", JOptionPane.ERROR_MESSAGE);
         }
@@ -72,24 +72,19 @@ public class CourseManager {
 
     public ArrayList<CourseUIModel> loadCourseList(String userID, String semester, int modelType) {
         ArrayList<CourseUIModel> list = csvManager.readCourseData(userID, semester, modelType);
-        if(list == null) return null;
-        else return list;
+        return list;
     }
 
     public String[] calcGradeAverage(java.util.List<CourseUIModel> list){
         double sum = 0, credit = 0;
         String[] course = null;
         for(CourseUIModel c : list){
-            course = c.getCourseData(CourseUIModel.DETAIL);
-            sum += gradeConverter(course[3]) * Integer.parseInt(course[2]);
-            credit += Integer.parseInt(course[2]);
+            if((course = c.getCourseData(CourseUIModel.DETAIL)).length == 0) continue;
+            sum += gradeConverter(course[3]) * Double.parseDouble(course[2]);
+            credit += Double.parseDouble(course[2]);
         }
         return new String[]{String.format("%.2f", sum / credit), Integer.toString((int)credit)};
     }
-
-//    public double getGradeAverage(String userID){
-//
-//    }
 
     public int isModified(java.util.List<CourseUIModel> newlist, java.util.List<String> oldlist){
         if(newlist.size() != oldlist.size()) {

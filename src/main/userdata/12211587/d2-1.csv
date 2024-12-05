@@ -1,7 +1,3 @@
 CourseID,CourseName,Credit,Grade
-CSE1112,IntroductionToComputerEngineering,2,A+
-CSE1101,ObjectOrientedProgramming1,3,B+
-CSE1103,ObjectOrientedProgramming2,3,A+
 CSE2104,InternetProgramming,3,A+
 CSE2112,DataStructures,4,A0
-CSE2101,LogicCircuits,3,A0
