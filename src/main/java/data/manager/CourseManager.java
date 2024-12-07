@@ -25,6 +25,7 @@ public class CourseManager {
                     "Only for undergraduate students enrolled in 2019-2024", "course load error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     public CourseModel getCourse(String name) {
         for(CourseModel c : courseList) {
             if(c.getCourseName().equals(name)) {
@@ -33,15 +34,16 @@ public class CourseManager {
         }
         return null;
     }
+
     public void clearCourseList(){
         if(courseList != null) courseList.clear();
     }
 
-    public ArrayList<String> searchCourse(String inputText) {
+    public ArrayList<String> searchCourse(String inputText, UserModel user) {
         ArrayList<String> result = new ArrayList<>();
         for(CourseModel c : courseList) {
             String target = c.getCourseName().trim().toLowerCase();
-            if(target.contains(inputText.trim().toLowerCase())) {
+            if(target.contains(inputText.trim().toLowerCase()) && !isAlreadyAdded(c.toString(), user)) {
                 result.add(c.toString());
             }
         }
@@ -96,6 +98,23 @@ public class CourseManager {
             if(!oldlist.contains(c.getCourseName())) return MODIFIED;
         }
         return NOT_MODIFIED;
+    }
+
+    public boolean isAlreadyAdded(String courseName, UserModel user) {
+        String[] semester = { "1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2" };
+        ArrayList<CourseUIModel> list = new ArrayList<>();
+        ArrayList<CourseUIModel> element = null;
+        for(String s : semester){
+            element = loadCourseList(user.getStudentID(), s, CourseUIModel.DETAIL);
+            if(element != null) {
+                list.addAll(element);
+            }
+        }
+
+        for(CourseUIModel c : list) {
+            if(c.getCourseName().equals(courseName)) { return true; }
+        }
+        return false;
     }
 
     private double gradeConverter(String grade){

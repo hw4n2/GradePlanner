@@ -153,7 +153,7 @@ public class PlanPage extends JPanel{
         lectureInput.setMaximumRowCount(9);
         lectureInput.setEditable(true);
 
-        lectureInput.getEditor().getEditorComponent().addKeyListener(new SearchEvent(lectureInput, courseManager));
+        lectureInput.getEditor().getEditorComponent().addKeyListener(new SearchEvent(lectureInput, courseManager, user));
         lectureInput.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {

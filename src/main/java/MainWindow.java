@@ -80,7 +80,7 @@ public class MainWindow extends JFrame {
                     JOptionPane.showMessageDialog(null, "Login failed", "error", JOptionPane.ERROR_MESSAGE);
                 }
                 else {
-                    System.out.println("[sign in] " + loginUser.getStudentID());
+                    System.out.println("[log in] " + loginUser.getStudentID());
                     frame.removeAll();
                     frame.add(initPages());
                     updateCard("Lobby");

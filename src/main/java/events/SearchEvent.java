@@ -1,6 +1,7 @@
 package events;
 
 import data.manager.*;
+import data.models.*;
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -10,10 +11,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SearchEvent extends KeyAdapter {
     private final JComboBox<String> comboBox;
     private final CourseManager courseManager;
+    private final UserModel user;
 
-    public SearchEvent(JComboBox<String> comboBox, CourseManager courseManager) {
+    public SearchEvent(JComboBox<String> comboBox, CourseManager courseManager, UserModel user) {
         this.comboBox = comboBox;
         this.courseManager = courseManager;
+        this.user = user;
     }
 
     @Override
@@ -28,7 +31,7 @@ public class SearchEvent extends KeyAdapter {
         }
         else {
             comboBox.removeAllItems();
-            ArrayList<String> results = courseManager.searchCourse(inputText);
+            ArrayList<String> results = courseManager.searchCourse(inputText, user);
             for (String lectureName : results) {
                 comboBox.addItem(lectureName);
             }

@@ -155,7 +155,7 @@ public class DetailsPage extends JPanel {
             gradeInput.addItem(s);
         }
 
-        lectureInput.getEditor().getEditorComponent().addKeyListener(new SearchEvent(lectureInput, courseManager));
+        lectureInput.getEditor().getEditorComponent().addKeyListener(new SearchEvent(lectureInput, courseManager, user));
         lectureInput.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
