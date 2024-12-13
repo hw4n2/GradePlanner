@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SearchEvent extends KeyAdapter {
     private final JComboBox<String> comboBox;

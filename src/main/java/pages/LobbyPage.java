@@ -20,6 +20,7 @@ public class LobbyPage extends JPanel {
         btnList = l;
         setLayout(new BorderLayout(0, 10));
         setBorder(new EmptyBorder(10, 0, 10, 10));
+        setBackground(Color.WHITE);
 
         JPanel topPanel = new JPanel(new BorderLayout(0, 5));
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -31,15 +32,26 @@ public class LobbyPage extends JPanel {
         halfline.setPreferredSize(new Dimension(0, 3));
         graphPanel.setPreferredSize(new Dimension(0, 100));
 
-        btnPanel.setBackground(Color.RED);
-        infoPanel.setBackground(Color.BLUE);
-        halfline.setBackground(Color.YELLOW);
-        graphPanel.setBackground(Color.GREEN);
+        topPanel.setBackground(Color.WHITE);
+        btnPanel.setBackground(Color.WHITE);
+        infoPanel.setBackground(Color.WHITE);
+        halfline.setBackground(Color.WHITE);
+        graphPanel.setBackground(Color.WHITE);
+        btnPanel.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+        graphPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
 
+        JButton refreshBtn = new JButton("Refresh");
         JButton usersBtn = new JButton("Users");
         JButton detailsBtn = new JButton("Details");
         usersBtn.addActionListener(new MoveBtnEvent());
         detailsBtn.addActionListener(new MoveBtnEvent());
+        refreshBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setInfoLabels();
+            }
+        });
+        btnPanel.add(refreshBtn);
         btnPanel.add(usersBtn);
         btnPanel.add(detailsBtn);
 
@@ -92,4 +104,5 @@ public class LobbyPage extends JPanel {
             infoLabels[5].setText(results[1] + " / 65");
         }
     }
+
 }
