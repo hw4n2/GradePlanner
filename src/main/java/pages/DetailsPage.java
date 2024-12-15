@@ -206,6 +206,10 @@ public class DetailsPage extends JPanel {
                         return;
                     }
                 }
+                if(courseManager.isAlreadyAdded(curCourse.getCourseName(), user)){
+                    JOptionPane.showMessageDialog(null, "Already exists:\n" + curCourse.getCourseName(), "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 CourseUIModel courseToAdd;
                 try{
                     courseToAdd = new CourseUIModel(CourseUIModel.DETAIL, curCourse, gradeInput.getSelectedItem().toString());

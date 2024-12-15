@@ -205,6 +205,10 @@ public class PlanPage extends JPanel{
                         return;
                     }
                 }
+                if(courseManager.isAlreadyAdded(curCourse.getCourseName(), user)){
+                    JOptionPane.showMessageDialog(null, "Already exists:\n" + curCourse.getCourseName(), "error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 CourseUIModel courseToAdd = new CourseUIModel(CourseUIModel.PLAN, curCourse);
                 inputlist.add(courseToAdd);
                 setCourseList();

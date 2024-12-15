@@ -117,6 +117,5 @@ public class CourseUIModel extends JPanel {
         });
     }
 
-
 }
 

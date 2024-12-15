@@ -105,4 +105,8 @@ public class LobbyPage extends JPanel {
         }
     }
 
+    private void setGraph(){
+
+    }
+
 }

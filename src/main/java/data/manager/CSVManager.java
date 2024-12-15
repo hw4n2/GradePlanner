@@ -94,6 +94,7 @@ class CSVManager {
         return createUser(id, password);
     }
 
+    //read certain enrollment's course (setting curriculum)
     ArrayList<CourseModel> loadAllCourseList(int enrollment) {
         if(enrollment < 19 || enrollment > 24) return null;
         coursefile = new File("src/main/resources/curriculum/" + enrollment + "curriculum.csv");
@@ -116,6 +117,7 @@ class CSVManager {
         return courseList;
     }
 
+    //write userdata of certain user's semester(save button action)
     void writeCourseData(java.util.List<String[]> data, String userID, String semester, int modelType){
         String lastItem = null;
         try{
@@ -147,6 +149,7 @@ class CSVManager {
         JOptionPane.showMessageDialog(null, "Save Successed", "success", JOptionPane.PLAIN_MESSAGE);
     }
 
+    //read datafile of certain user's semester(semester button action)
     ArrayList<CourseUIModel> readCourseData(String userID, String semester, int modelType){
         try{
             if(modelType == CourseUIModel.DETAIL) {
@@ -173,6 +176,7 @@ class CSVManager {
         }
     }
 
+    //add csv header to datafile
     private void addHeader(String header){
         if(bw == null) return;
         try{
