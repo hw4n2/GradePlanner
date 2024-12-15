@@ -87,11 +87,16 @@ public class LobbyPage extends JPanel {
         String[] semester = { "1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2" };
         ArrayList<CourseUIModel> list = new ArrayList<>();
         ArrayList<CourseUIModel> element = null;
-        for(String s : semester){
-            element = courseManager.loadCourseList(user.getStudentID(), s, CourseUIModel.DETAIL);
-            if(element != null) {
+        double[] avgList = new double[semester.length];
+        for(int i = 0; i < semester.length; i++){
+            element = courseManager.loadCourseList(user.getStudentID(), semester[i], CourseUIModel.DETAIL);
+            if(!element.isEmpty()) {
                 list.addAll(element);
-                if(!element.isEmpty()) infoLabels[3].setText(s.charAt(0) + " - " + s.charAt(2));
+                infoLabels[3].setText(semester[i].charAt(0) + " - " + semester[i].charAt(2));
+                avgList[i] = Double.parseDouble(courseManager.calcGradeAverage(element)[0]);
+            }
+            else {
+                avgList[i] = 0.0;
             }
         }
         if(list.isEmpty()){
@@ -103,9 +108,10 @@ public class LobbyPage extends JPanel {
             infoLabels[4].setText(results[0] + " / 4.5");
             infoLabels[5].setText(results[1] + " / 65");
         }
+        setGraph(avgList);
     }
 
-    private void setGraph(){
+    private void setGraph(double[] avgList){
 
     }
 
