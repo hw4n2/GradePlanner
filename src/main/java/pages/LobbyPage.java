@@ -13,6 +13,7 @@ public class LobbyPage extends JPanel {
     private JList<String> btnList;
     private UserModel user;
     private CourseManager courseManager;
+    private GraphPanel graphPanel;
 
     public LobbyPage(UserModel user, CourseManager cm, JList<String> l) {
         this.user = user;
@@ -26,19 +27,17 @@ public class LobbyPage extends JPanel {
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JPanel infoPanel = new JPanel(new GridLayout(2, 3));
         JLabel halfline = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        JPanel graphPanel = new JPanel();
+        graphPanel = new GraphPanel();
         btnPanel.setPreferredSize(new Dimension(0, 40));
         infoPanel.setPreferredSize(new Dimension(0, 60));
         halfline.setPreferredSize(new Dimension(0, 3));
-        graphPanel.setPreferredSize(new Dimension(0, 100));
 
         topPanel.setBackground(Color.WHITE);
         btnPanel.setBackground(Color.WHITE);
         infoPanel.setBackground(Color.WHITE);
         halfline.setBackground(Color.WHITE);
-        graphPanel.setBackground(Color.WHITE);
         btnPanel.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
-        graphPanel.setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+
 
         JButton refreshBtn = new JButton("Refresh");
         JButton usersBtn = new JButton("Users");
@@ -62,8 +61,8 @@ public class LobbyPage extends JPanel {
         }
         setInfoLabels();
 
-        JLabel tmpGraph = new JLabel("Graph");
-        graphPanel.add(tmpGraph);
+        JLabel graphLabel = new JLabel("Grade Chart");
+        graphPanel.add(graphLabel);
 
         topPanel.add(btnPanel, BorderLayout.NORTH);
         topPanel.add(infoPanel, BorderLayout.CENTER);
@@ -96,7 +95,7 @@ public class LobbyPage extends JPanel {
                 avgList[i] = Double.parseDouble(courseManager.calcGradeAverage(element)[0]);
             }
             else {
-                avgList[i] = 0.0;
+                avgList[i] = -1.0;
             }
         }
         if(list.isEmpty()){
@@ -108,11 +107,88 @@ public class LobbyPage extends JPanel {
             infoLabels[4].setText(results[0] + " / 4.5");
             infoLabels[5].setText(results[1] + " / 65");
         }
-        setGraph(avgList);
+        graphPanel.setGradeList(avgList);
+        graphPanel.repaint();
     }
 
-    private void setGraph(double[] avgList){
+    class GraphPanel extends JPanel {
+        private double[] gradelist;
+        GraphPanel() {
+            setPreferredSize(new Dimension(0, 100));
+            setBackground(Color.WHITE);
+            setBorder(new MatteBorder(1, 1, 1, 1, Color.BLACK));
+            gradelist = new double[] { -1.0 };
+        }
+        void setGradeList(double[] gradelist) {
+            this.gradelist = gradelist;
+        }
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.setColor(Color.BLACK);
+            g.drawLine(30, 30, 30, getHeight() - 30);
+            g.drawLine(30, getHeight() - 30, getWidth() - 30, getHeight() - 30);
+            paintGraph(g);
+        }
 
+        private void paintGraph(Graphics g) {
+            if(gradelist[0] == -1.0) return;
+
+            String[] semester = { "1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2" };
+            double[] list = new double[]{ 4.5, 4.0, 3.5, 3.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.0 };
+            ArrayList<Double> indexY = new ArrayList<>();
+
+            double lowerBound = roundMinGrade(gradelist);
+            for(double i : list){
+                if(i >= lowerBound) indexY.add(i);
+            }
+
+            int vgap = (getHeight() - 60) / (indexY.size());
+            int hgap = (getWidth() - 60) / semester.length;
+            int lowerPos = getHeight() - 50;
+            Graphics2D g2d = (Graphics2D) g; //chatGPT reference
+            Stroke oldstroke = g2d.getStroke();
+            int lowerY = lowerPos, upperY = 0;
+            for(int i = 0; i < indexY.size(); i++){ //draw y axis grade indexY
+                g.setColor(Color.GRAY);
+                g.drawLine(50, lowerPos - (i * vgap), getWidth() - 50, lowerPos - (i * vgap));
+                g.drawString(indexY.get(indexY.size() - 1 - i).toString(), 5, lowerPos - (i * vgap) + 5);
+                if(i == indexY.size() - 1) upperY = lowerPos - (i * vgap);
+            }
+
+            g2d.setColor(Color.RED);
+            g2d.setStroke(new BasicStroke(3.0f));
+            for(int i = 0; i < gradelist.length; i++){
+                g2d.fillOval(73 + (i * hgap), lowerPos - (convertYAxis(gradelist[i], lowerY, upperY, indexY)) - 5, 10, 10);
+                if(i + 1 < gradelist.length && gradelist[i + 1] != -1.0) {
+                    g2d.drawLine(73 + (i * hgap) + 5, lowerPos - (convertYAxis(gradelist[i], lowerY, upperY, indexY)),
+                            73 + ((i + 1) * hgap) + 5, lowerPos - (convertYAxis(gradelist[i + 1], lowerY, upperY, indexY)));
+                }
+            }
+
+            g2d.setStroke(oldstroke);
+            g.setColor(Color.GRAY);
+            for(int i = 0; i < semester.length; i++){ //draw x axis semester indexY
+                g.drawString(semester[i], 70 + (i * hgap), getHeight() - 10);
+            }
+        }
+
+        private double roundMinGrade(double[] gradelist) {
+            double min = Double.MAX_VALUE;
+            for (double i : gradelist) {
+                if (i != -1.0 && i < min) {
+                    min = i;
+                }
+            }
+            return Math.floor(min * 2) / 2.0;
+        }
+        
+        private int convertYAxis(double y, int lowerY, int upperY, ArrayList<Double> indexY) {
+            int ylength = lowerY - upperY;
+            double indexGap = indexY.getFirst() - indexY.getLast();
+            double value = ylength / indexGap;
+            return (int)((y - indexY.getLast()) * value);
+        }
     }
 
 }

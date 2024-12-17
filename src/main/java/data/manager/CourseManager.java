@@ -78,14 +78,15 @@ public class CourseManager {
     }
 
     public String[] calcGradeAverage(java.util.List<CourseUIModel> list){
-        double sum = 0, credit = 0;
+        double sum = 0, credit = 0, realcredit = 0;
         String[] course = null;
         for(CourseUIModel c : list){
             if((course = c.getCourseData(CourseUIModel.DETAIL)).length == 0) continue;
             sum += gradeConverter(course[3]) * Double.parseDouble(course[2]);
             credit += Double.parseDouble(course[2]);
+            if(!course[3].equals("F")) realcredit += Double.parseDouble(course[2]);
         }
-        return new String[]{String.format("%.2f", sum / credit), Integer.toString((int)credit)};
+        return new String[]{String.format("%.2f", sum / credit), Integer.toString((int)realcredit)};
     }
 
     public int isModified(java.util.List<CourseUIModel> newlist, java.util.List<String> oldlist){
@@ -127,7 +128,7 @@ public class CourseManager {
             case "C0": return 2.0;
             case "D+": return 1.5;
             case "D0": return 1.0;
-            case "F": return 0;
+            case "F": return 0.0;
             default: return -1;
         }
     }
