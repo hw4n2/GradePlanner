@@ -4,10 +4,12 @@ public class UserModel {
     private final String studentID;
     private final String name;
     private final String enrollment;
-    public UserModel(String id, String name) {
+    private final String status;
+    public UserModel(String id, String name, String status) {
         String tmpenroll = null;
         this.studentID = id;
         this.name = name;
+        this.status = status;
         try{
             tmpenroll = studentID.charAt(2) + "" + studentID.charAt(3);
         } catch (Exception e) {
@@ -23,4 +25,6 @@ public class UserModel {
         return name;
     }
     public int getEnrollment() { return Integer.parseInt(enrollment); }
+
+    public String getStatus() { return status; }
 }

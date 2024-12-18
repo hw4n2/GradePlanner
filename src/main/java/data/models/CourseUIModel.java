@@ -12,11 +12,11 @@ public class CourseUIModel extends JPanel {
     public static final int PLAN = 1;
     public static final int DETAIL = 2;
 
-    private JLabel idItem = new JLabel();
-    private JLabel nameItem = new JLabel();
-    private JLabel recommendItem = new JLabel();
-    private JLabel gradeItem = new JLabel();
-    private JLabel creditItem = new JLabel();
+    private JLabel idItem = new JLabel("");
+    private JLabel nameItem = new JLabel("");
+    private JLabel recommendItem = new JLabel("");
+    private JLabel gradeItem = new JLabel("");
+    private JLabel creditItem = new JLabel("");
     private JButton deleteBtn;
 
     public CourseUIModel(int modelType, CourseModel course) {
@@ -117,5 +117,42 @@ public class CourseUIModel extends JPanel {
         });
     }
 
+    @Override
+    public String toString() {
+        if(gradeItem.getText().isEmpty()){
+            return nameItem.getText();
+        }
+        else {
+            return nameItem.getText() + "@" + gradeItem.getText();
+        }
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof CourseUIModel)) return false;
+        CourseUIModel other = (CourseUIModel) obj;
+        String thisName = this.nameItem.getText();
+        String thisRecommend = this.recommendItem.getText();
+        String thisGrade = this.gradeItem.getText();
+        String otherName = other.nameItem.getText();
+        String otherGrade = other.gradeItem.getText();
+        if (thisGrade.isEmpty()) {
+            return thisName.equals(otherName);
+        }
+        return thisName.equals(otherName) && thisGrade.equals(otherGrade);
+    }
+
+    @Override
+    public int hashCode() {
+        String thisName = this.nameItem.getText();
+        String thisRecommend = this.recommendItem.getText();
+        String thisGrade = this.gradeItem.getText();
+        if (thisGrade.isEmpty() && !thisRecommend.isEmpty()) {
+            return Objects.hash(thisName);
+        } else if (thisRecommend.isEmpty() && !thisGrade.isEmpty()) {
+            return Objects.hash(thisName, thisGrade);
+        }
+        return super.hashCode();
+    }
 }
 

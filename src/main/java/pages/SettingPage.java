@@ -3,6 +3,11 @@ package pages;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import data.manager.*;
+import data.models.*;
 
 public class SettingPage extends JPanel {
     private JButton saveBtn;
@@ -16,7 +21,10 @@ public class SettingPage extends JPanel {
     private JLabel profileID;
     private JLabel profileName;
 
-    public SettingPage() {
+    private UserModel user;
+
+    public SettingPage(UserModel user, JList<String> btnList) {
+        this.user = user;
         setLayout(new BorderLayout(0, 10));
         setBackground(Color.WHITE);
 
@@ -37,7 +45,7 @@ public class SettingPage extends JPanel {
         westPanel.setPreferredSize(new Dimension(200, 0));
         westPanel.setBackground(Color.WHITE);
 
-        JPanel settingPanel = new JPanel(new GridLayout(6, 1, 20, 0));
+        JPanel settingPanel = new JPanel(new GridLayout(7, 1, 10, 0));
         settingPanel.setBackground(Color.WHITE);
 
         getPhoto = new JButton("Change Photo");
@@ -63,13 +71,15 @@ public class SettingPage extends JPanel {
 
         westPanel.add(profileWrapper, BorderLayout.CENTER);
 
-        JLabel settingLabel = new JLabel("Check what you want to share");
+        JLabel settingLabel = new JLabel("Settings");
         settingLabel.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+        Font tmp = settingLabel.getFont().deriveFont(20f);
+        settingLabel.setFont(tmp);
 
-
+        JLabel explain = new JLabel("Check what you want to share");
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         namePanel.setBackground(Color.WHITE);
-        JLabel nameLabel = new JLabel("Name");
+        JLabel nameLabel = new JLabel("rename");
         namePanel.add(nameLabel);
         nameInput = new JTextField(10);
         nameCheck = new JCheckBox("Name");
@@ -83,16 +93,38 @@ public class SettingPage extends JPanel {
 
         namePanel.add(nameInput);
         settingPanel.add(settingLabel);
-        settingPanel.add(namePanel);
+        settingPanel.add(explain);
         settingPanel.add(nameCheck);
         settingPanel.add(gradeCheck);
         settingPanel.add(IdCheck);
         settingPanel.add(semesterCheck);
+        settingPanel.add(namePanel);
 
         centerPanel.add(westPanel, BorderLayout.WEST);
         centerPanel.add(settingPanel, BorderLayout.CENTER);
 
         add(btnPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
+
+        btnList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e){
+                if(btnList.getSelectedValue() != null && btnList.getSelectedValue().equals("Settings")){
+                    setInfos();
+                }
+            }
+        });
+    }
+    public void setInfos(){
+        profileID.setText("ID  " + user.getStudentID());
+        profileName.setText("Name  " + user.getName());
+        nameInput.setText(user.getName());
+
+        String status = user.getStatus();
+        nameCheck.setSelected(status.charAt(0) == 'Y');
+        gradeCheck.setSelected(status.charAt(1) == 'Y');
+        IdCheck.setSelected(status.charAt(2) == 'Y');
+        semesterCheck.setSelected(status.charAt(3) == 'Y');
+
     }
 }

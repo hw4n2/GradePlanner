@@ -23,7 +23,7 @@ class CSVManager {
             if(usersfile.createNewFile()){
                 System.out.println("File users.csv has been created");
                 bw = new BufferedWriter(new FileWriter(usersfile));
-                bw.write("id,password,name"); //csv header write
+                bw.write("id,password,name,status"); //csv header write
                 bw.newLine();
                 bw.close();
             }
@@ -55,12 +55,12 @@ class CSVManager {
     UserModel createUser(String id, String password) {
         try {
             bw = new BufferedWriter(new FileWriter(usersfile, true));
-            bw.write(id + "," + password + "," + id);
+            bw.write(id + "," + password + "," + id + "," + "YYYY");
             bw.newLine();
             bw.close();
             createUserData(id);
 
-            return new UserModel(id, id);
+            return new UserModel(id, id, "YYYY");
         } catch(IOException e){
             e.printStackTrace();
             return null;
@@ -82,7 +82,7 @@ class CSVManager {
                 if(field.length == 0) break;
                 if(field[0].equals(id)){
                     if(field[1].equals(password)) {
-                        return new UserModel(field[0], field[2]);
+                        return new UserModel(field[0], field[2], field[3]);
                     }
                     else return null;
                 }

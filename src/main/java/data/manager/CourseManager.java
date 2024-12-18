@@ -43,7 +43,7 @@ public class CourseManager {
         ArrayList<String> result = new ArrayList<>();
         for(CourseModel c : courseList) {
             String target = c.getCourseName().trim().toLowerCase();
-            if(target.contains(inputText.trim().toLowerCase()) && !isAlreadyAdded(c.toString(), user)) {
+            if(target.contains(inputText.trim().toLowerCase())) {
                 result.add(c.toString());
             }
         }
@@ -89,19 +89,22 @@ public class CourseManager {
         return new String[]{String.format("%.2f", sum / credit), Integer.toString((int)realcredit)};
     }
 
-    public int isModified(java.util.List<CourseUIModel> newlist, java.util.List<String> oldlist){
+    public int isModified(java.util.List<CourseUIModel> newlist, java.util.List<CourseUIModel> oldlist){
         if(newlist.size() != oldlist.size()) {
             return MODIFIED;
         }
         if(newlist.isEmpty()) return BOTH_EMPTY;
 
         for(CourseUIModel c : newlist) {
-            if(!oldlist.contains(c.getCourseName())) return MODIFIED;
+            if(!oldlist.contains(c)) {
+                return MODIFIED;
+            }
+
         }
         return NOT_MODIFIED;
     }
 
-    public boolean isAlreadyAdded(String courseName, UserModel user) {
+    public boolean isAlreadySaved(String courseName, UserModel user) {
         String[] semester = { "1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2" };
         ArrayList<CourseUIModel> list = new ArrayList<>();
         ArrayList<CourseUIModel> element = null;
@@ -114,6 +117,13 @@ public class CourseManager {
 
         for(CourseUIModel c : list) {
             if(c.getCourseName().equals(courseName)) { return true; }
+        }
+        return false;
+    }
+
+    public boolean isIncluded(java.util.List<CourseUIModel> list, CourseModel course){
+        for(CourseUIModel c : list){
+            if(course.getCourseName().equals(c.getCourseName())) { return true; }
         }
         return false;
     }

@@ -43,7 +43,7 @@ public class DetailsPage extends JPanel {
         semesterLabel.setFont(tmp);
 
         String[] semester = { "1 - 1", "1 - 2", "2 - 1", "2 - 2", "3 - 1", "3 - 2", "4 - 1", "4 - 2" };
-        ArrayList<String> listToCmp = new ArrayList<>();
+        ArrayList<CourseUIModel> oldList = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             JButton btn = new JButton(semester[i]);
             btn.addActionListener(new ActionListener() {
@@ -53,7 +53,7 @@ public class DetailsPage extends JPanel {
                     semesterLabel.setText(semesterText);
                     inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.DETAIL);
                     setCourseList();
-                    setOldList(listToCmp);
+                    setOldList(oldList);
                     setInfoLabel();
                 }
             });
@@ -80,7 +80,7 @@ public class DetailsPage extends JPanel {
                     JOptionPane.showMessageDialog(null, "Choose Semester first", "error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                int modifyFlag = courseManager.isModified(inputlist, listToCmp);
+                int modifyFlag = courseManager.isModified(inputlist, oldList);
 
                 if(modifyFlag == CourseManager.BOTH_EMPTY){
                     JOptionPane.showMessageDialog(null, "Add Lecture first", "error", JOptionPane.ERROR_MESSAGE);
@@ -92,7 +92,7 @@ public class DetailsPage extends JPanel {
                 }
                 String sem = semesterLabel.getText().charAt(0) + "-" + semesterLabel.getText().charAt(7);
                 courseManager.saveCourseList(inputlist, user.getStudentID(), sem, CourseUIModel.DETAIL);
-                setOldList(listToCmp);
+                setOldList(oldList);
                 setInfoLabel();
             }
         });
@@ -206,9 +206,11 @@ public class DetailsPage extends JPanel {
                         return;
                     }
                 }
-                if(courseManager.isAlreadyAdded(curCourse.getCourseName(), user)){
-                    JOptionPane.showMessageDialog(null, "Already exists:\n" + curCourse.getCourseName(), "error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                if(courseManager.isAlreadySaved(curCourse.getCourseName(), user)){
+                    if(!courseManager.isIncluded(oldList, curCourse)) {
+                        JOptionPane.showMessageDialog(null, "Already exists:\n" + curCourse.getCourseName(), "error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                 }
                 CourseUIModel courseToAdd;
                 try{
@@ -255,11 +257,9 @@ public class DetailsPage extends JPanel {
         addedList.repaint();
     }
 
-    private void setOldList(ArrayList<String> oldList){
+    private void setOldList(ArrayList<CourseUIModel> oldList){
         oldList.clear();
-        for(CourseUIModel c : inputlist){
-            oldList.add(c.getCourseName());
-        }
+        oldList.addAll(inputlist);
     }
 
     private void setInfoLabel(){

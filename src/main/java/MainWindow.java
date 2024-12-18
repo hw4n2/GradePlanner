@@ -142,7 +142,7 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateCard("Settings");
-                btnList.clearSelection();
+                btnList.setSelectedValue("Settings", false);
             }
         });
         logoutBtn.addActionListener(new ActionListener(){
@@ -174,6 +174,7 @@ public class MainWindow extends JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 String pagename = (String)btnList.getSelectedValue();
                 updateCard(pagename);
+
             }
         });
 
@@ -188,7 +189,7 @@ public class MainWindow extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         lobby = new LobbyPage(loginUser, courseManager, btnList);
-        setting = new SettingPage();
+        setting = new SettingPage(loginUser, btnList);
         ranking = new RankingPage();
         details = new DetailsPage(loginUser, courseManager);
         plan = new PlanPage(loginUser, courseManager);
