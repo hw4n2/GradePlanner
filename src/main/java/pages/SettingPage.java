@@ -1,10 +1,12 @@
 package pages;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
+import javax.swing.filechooser.*;
 
 import data.manager.*;
 import data.models.*;
@@ -17,14 +19,16 @@ public class SettingPage extends JPanel {
     private JCheckBox gradeCheck;
     private JCheckBox IdCheck;
     private JCheckBox semesterCheck;
-    private ImageIcon photo;
+    private JLabel photoLabel;
     private JLabel profileID;
     private JLabel profileName;
 
     private UserModel user;
+    private UserManager userManager;
 
-    public SettingPage(UserModel user, JList<String> btnList) {
+    public SettingPage(UserModel user, UserManager um, JList<String> btnList, JButton userBtn) {
         this.user = user;
+        this.userManager = um;
         setLayout(new BorderLayout(0, 10));
         setBackground(Color.WHITE);
 
@@ -48,13 +52,37 @@ public class SettingPage extends JPanel {
         JPanel settingPanel = new JPanel(new GridLayout(7, 1, 10, 0));
         settingPanel.setBackground(Color.WHITE);
 
+        ImageChooser chooser = new ImageChooser();
         getPhoto = new JButton("Change Photo");
+        getPhoto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                chooser.choose();
+            }
+        });
+        saveBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                String status = "";
+                status += (IdCheck.isSelected() ? "Y" : "N");
+                status += (nameCheck.isSelected() ? "Y" : "N");
+                status += (semesterCheck.isSelected() ? "Y" : "N");
+                status += (gradeCheck.isSelected() ? "Y" : "N");
+
+                if(user.getStatus().equals(status) && user.getName().equals(nameInput.getText()) && chooser.getFile() == null){
+                    JOptionPane.showMessageDialog(null, "Nothing changed", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                userManager.saveSettings(user, new String[]{ status, nameInput.getText() }, chooser.getFile());
+                setInfos();
+                userBtn.setText("User " + user.getName());
+            }
+        });
+
         JPanel profilePanel = new JPanel(new BorderLayout(0, 10));
         profilePanel.setBackground(Color.WHITE);
-        photo = new ImageIcon("src/main/resources/SymbolMark.jpg");
-        ImageIcon resized = new ImageIcon(photo.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH));
-        JLabel photoLabel = new JLabel(resized);
-        photoLabel.setBorder(new MatteBorder(2, 2, 2, 2, Color.GRAY));
+        photoLabel = new JLabel();
         profileID = new JLabel("ID");
         profileName = new JLabel("Name");
         profileID.setBorder(new EmptyBorder(0, 0, 20, 0));
@@ -63,11 +91,13 @@ public class SettingPage extends JPanel {
         infoWrapper.setBackground(Color.WHITE);
         infoWrapper.add(profileID);
         infoWrapper.add(profileName);
+        infoWrapper.setBorder(new MatteBorder(1, 0, 0, 0, Color.BLACK));
         profilePanel.add(photoLabel, BorderLayout.CENTER);
         profilePanel.add(infoWrapper, BorderLayout.SOUTH);
 
         profileWrapper.add(getPhoto, BorderLayout.NORTH);
         profileWrapper.add(profilePanel, BorderLayout.CENTER);
+        profileWrapper.setBorder(new MatteBorder(2, 2, 2, 2, Color.GRAY));
 
         westPanel.add(profileWrapper, BorderLayout.CENTER);
 
@@ -120,11 +150,45 @@ public class SettingPage extends JPanel {
         profileName.setText("Name  " + user.getName());
         nameInput.setText(user.getName());
 
-        String status = user.getStatus();
-        nameCheck.setSelected(status.charAt(0) == 'Y');
-        gradeCheck.setSelected(status.charAt(1) == 'Y');
-        IdCheck.setSelected(status.charAt(2) == 'Y');
-        semesterCheck.setSelected(status.charAt(3) == 'Y');
+        ImageIcon photo = new ImageIcon("src/main/userdata/" + user.getStudentID() + "/userimage.png");
+        ImageIcon resized = new ImageIcon(photo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+        photoLabel.setIcon(resized);
+        photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        photoLabel.setVerticalAlignment(SwingConstants.CENTER);
 
+        String status = user.getStatus();
+        nameCheck.setSelected(status.charAt(1) == 'Y');
+        gradeCheck.setSelected(status.charAt(3) == 'Y');
+        IdCheck.setSelected(status.charAt(0) == 'Y');
+        semesterCheck.setSelected(status.charAt(2) == 'Y');
+    }
+
+    class ImageChooser extends JFileChooser {
+        JFileChooser chooser;
+        private File selected;
+
+        ImageChooser(){
+            selected = null;
+            chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("images", "jpeg", "jpg", "png", "gif");
+            chooser.setFileFilter(filter);
+        }
+
+        void choose(){
+            int ret = chooser.showOpenDialog(null);
+            if(ret == JFileChooser.APPROVE_OPTION) {
+                selected = chooser.getSelectedFile();
+                ImageIcon photo = new ImageIcon(selected.getPath());
+                ImageIcon resized = new ImageIcon(photo.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+                photoLabel.setIcon(resized);
+                photoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                photoLabel.setVerticalAlignment(SwingConstants.CENTER);
+            }
+            else selected = null;
+        }
+
+        File getFile(){
+            return selected;
+        }
     }
 }

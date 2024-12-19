@@ -19,8 +19,6 @@ public class PlanPage extends JPanel{
     private JTextField lectureIDInput;
     private JTextField creditInput;
     private JTextField recommendInput;
-    private CourseModel curCourse;
-    private CourseManager courseManager;
 
     private JPanel itemPanel;
     private JLabel idItem;
@@ -30,8 +28,13 @@ public class PlanPage extends JPanel{
     private ArrayList<CourseUIModel> inputlist = null;
     private JPanel addedList;
 
+    private CourseModel curCourse;
+    private CourseManager courseManager;
+    private UserModel user;
+
     public PlanPage(UserModel user, CourseManager cm) {
         this.courseManager = cm;
+        this.user = user;
         Border emptyBorder = new EmptyBorder(10, 5, 10, 5);
         Border lineBorder = new LineBorder(Color.BLACK);
         setLayout(new BorderLayout());
@@ -100,7 +103,7 @@ public class PlanPage extends JPanel{
             }
         });
 
-        infoLabel = new JLabel("Credits - / 21");
+        infoLabel = new JLabel("Credits - / 21    Total Credits - / 65");
 
         addedList = new JPanel();
         addedList.setBackground(Color.WHITE);
@@ -257,7 +260,13 @@ public class PlanPage extends JPanel{
 
     private void setInfoLabel(){
         String[] infos = courseManager.calcGradeAverage(inputlist);
-        if(!inputlist.isEmpty()) infoLabel.setText("Credits " + infos[1] + " / 21");
-        else infoLabel.setText("Credits - / 21");
+        String[] semester = { "1-1", "1-2", "2-1", "2-2", "3-1", "3-2", "4-1", "4-2" };
+        int creditSum = 0;
+        for(int i = 0; i < semester.length; i++){
+            creditSum += Integer.parseInt(courseManager.calcGradeAverage(courseManager.loadCourseList(user.getStudentID(), semester[i], CourseUIModel.PLAN))[1]);
+        }
+
+        if(!inputlist.isEmpty()) infoLabel.setText("Credits " + infos[1] + " / 21    Total Credits " + creditSum + " / 65");
+        else infoLabel.setText("Credits - / 21    Total Credits " + creditSum + " / 65");
     }
 }

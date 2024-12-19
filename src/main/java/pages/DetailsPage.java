@@ -46,10 +46,20 @@ public class DetailsPage extends JPanel {
         ArrayList<CourseUIModel> oldList = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             JButton btn = new JButton(semester[i]);
+            int curIndex = i;
             btn.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String semesterText = btn.getText().charAt(0) + " Year " + btn.getText().charAt(4) + " Semester";
+
+                    if(!btn.getText().equals("1 - 1")){
+                        ArrayList<CourseUIModel> tmpList = courseManager.loadCourseList(user.getStudentID(), semester[curIndex - 1].charAt(0) + "-" + semester[curIndex - 1].charAt(4), CourseUIModel.DETAIL);
+                        if(tmpList.isEmpty()){
+                            JOptionPane.showMessageDialog(null, "Fill previous semester first", "error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    }
+
                     semesterLabel.setText(semesterText);
                     inputlist = courseManager.loadCourseList(user.getStudentID(), btn.getText().charAt(0) + "-" + btn.getText().charAt(4), CourseUIModel.DETAIL);
                     setCourseList();

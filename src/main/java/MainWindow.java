@@ -22,12 +22,12 @@ public class MainWindow extends JFrame {
     private JPanel plan;
 
     private UserModel loginUser = null;
-    private CourseModel courseModel = null;
     private UserManager userManager = null;
     private CourseManager courseManager = null;
 
     private MainWindow(){
         frame = getContentPane();
+        setIconImage(new ImageIcon("src/main/resources/favicon.jpg").getImage());
         pagesCard = new CardLayout();
         setTitle("GradePlanner");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,7 +77,7 @@ public class MainWindow extends JFrame {
                 String id = loginIdInput.getText();
                 String pw = new String(loginpwInput.getPassword());
                 if((loginUser = userManager.login(id, pw)) == null){
-                    JOptionPane.showMessageDialog(null, "Login failed", "error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
                 else {
                     System.out.println("[log in] " + loginUser.getStudentID());
@@ -189,8 +189,8 @@ public class MainWindow extends JFrame {
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         lobby = new LobbyPage(loginUser, courseManager, btnList);
-        setting = new SettingPage(loginUser, btnList);
-        ranking = new RankingPage();
+        setting = new SettingPage(loginUser, userManager, btnList, userBtn);
+        ranking = new RankingPage(userManager, courseManager, loginUser, btnList);
         details = new DetailsPage(loginUser, courseManager);
         plan = new PlanPage(loginUser, courseManager);
         pagePanel.add(lobby, "Lobby");

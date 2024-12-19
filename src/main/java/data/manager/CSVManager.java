@@ -45,6 +45,15 @@ class CSVManager {
                 userfile = new File(userDir + "/" + s + ".csv");
                 userfile.createNewFile();
             }
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream("src/main/resources/SymbolMark.jpg"));
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(userDir + "/userimage.png"));
+            int buf;
+            while ((buf = bis.read()) != -1) {
+                bos.write(buf);
+            }
+            bos.flush();
+            bos.close();
+            bis.close();
         } catch(IOException e){
             JOptionPane.showMessageDialog(null, "Error occured\nTry again", "error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -92,6 +101,68 @@ class CSVManager {
             return null;
         }
         return createUser(id, password);
+    }
+
+    int updateUserData(String id, String[] args, File imagefile){
+        ArrayList<String> temp = new ArrayList<>();
+        try {
+            br = new BufferedReader(new FileReader(usersfile));
+            String line = null;
+
+            while((line = br.readLine()) != null){
+                String[] field = line.split(",");
+                if(field.length == 0) break;
+                if(field[0].equals(id)){
+                    line = "";
+                    line += field[0] + ",";
+                    line += field[1] + ",";
+                    line += args[1] + ",";
+                    line += args[0];
+                }
+                temp.add(line);
+            }
+
+            bw = new BufferedWriter(new FileWriter(usersfile));
+            for(String s : temp){
+                bw.write(s);
+                bw.newLine();
+            }
+            br.close();
+            bw.close();
+
+            if(imagefile == null) return 0;
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(imagefile.getPath()));
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(userdataPath + id + "/userimage.png"));
+            int buf;
+            while ((buf = bis.read()) != -1) {
+                bos.write(buf);
+            }
+            bos.flush();
+            bos.close();
+            bis.close();
+            return 0;
+        } catch(IOException e){
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    ArrayList<String[]> loadAllUsers(){
+        ArrayList<String[]> list = new ArrayList<>();
+        try {
+            br = new BufferedReader(new FileReader(usersfile));
+            String line = br.readLine();
+
+            while((line = br.readLine()) != null){
+                String[] field = line.split(",");
+                if(field.length == 0) break;
+                list.add(new String[]{ field[0], field[2], field[3] });
+            }
+            return list;
+        } catch(IOException e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     //read certain enrollment's course (setting curriculum)
@@ -180,7 +251,7 @@ class CSVManager {
     private void addHeader(String header){
         if(bw == null) return;
         try{
-            bw.write(header);  // CourseID,CourseName,Credit, + grade/semester (total 4 element)
+            bw.write(header);
             bw.newLine();
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Writing CSVHeader failed", "error", JOptionPane.ERROR_MESSAGE);

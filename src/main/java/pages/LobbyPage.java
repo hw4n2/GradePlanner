@@ -59,9 +59,17 @@ public class LobbyPage extends JPanel {
         for (JLabel la : infoLabels) {
             infoPanel.add(la);
         }
+        for(int i = 0; i < 3; i++){
+            infoLabels[i].setFont(infoLabels[i].getFont().deriveFont(16f));
+        }
         setInfoLabels();
 
         JLabel graphLabel = new JLabel("Grade Chart");
+        Font font = new Font(graphLabel.getFont().getName(), Font.PLAIN, 18);
+        graphLabel.setFont(font);
+        graphLabel.setBackground(Color.BLUE);
+        graphLabel.setForeground(Color.WHITE);
+        graphLabel.setOpaque(true);
         graphPanel.add(graphLabel);
 
         topPanel.add(btnPanel, BorderLayout.NORTH);
@@ -159,6 +167,7 @@ public class LobbyPage extends JPanel {
             g2d.setColor(Color.RED);
             g2d.setStroke(new BasicStroke(3.0f));
             for(int i = 0; i < gradelist.length; i++){
+                if(gradelist[i] == -1.0) continue;
                 g2d.fillOval(73 + (i * hgap), lowerPos - (convertYAxis(gradelist[i], lowerY, upperY, indexY)) - 5, 10, 10);
                 if(i + 1 < gradelist.length && gradelist[i + 1] != -1.0) {
                     g2d.drawLine(73 + (i * hgap) + 5, lowerPos - (convertYAxis(gradelist[i], lowerY, upperY, indexY)),

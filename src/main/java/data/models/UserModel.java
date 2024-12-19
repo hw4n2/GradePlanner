@@ -2,9 +2,10 @@ package data.models;
 
 public class UserModel {
     private final String studentID;
-    private final String name;
     private final String enrollment;
-    private final String status;
+    private String name;
+    private String status;
+
     public UserModel(String id, String name, String status) {
         String tmpenroll = null;
         this.studentID = id;
@@ -25,6 +26,12 @@ public class UserModel {
         return name;
     }
     public int getEnrollment() { return Integer.parseInt(enrollment); }
-
     public String getStatus() { return status; }
+
+    public void setName(String name){
+        this.name = name;
+    }
+    public void setStatus(String status){
+        this.status = status;
+    }
 }
