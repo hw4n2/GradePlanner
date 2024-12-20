@@ -34,7 +34,6 @@ public class MainWindow extends JFrame {
         userManager = new UserManager();
         courseManager = new CourseManager();
 
-        frame.add(initPages());
         frame.add(initLogin());
 
         setSize(1000, 600);

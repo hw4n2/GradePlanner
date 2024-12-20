@@ -276,5 +276,9 @@ public class DetailsPage extends JPanel {
         String[] infos = courseManager.calcGradeAverage(inputlist);
         if(!inputlist.isEmpty()) infoLabel.setText("Major Grade " + infos[0] + " Earned Credits " + infos[1]);
         else infoLabel.setText("Major Grade -  Earned Credits -");
+        lectureInput.removeAllItems();
+        lectureIDInput.setText("");
+        creditInput.setText("");
+        curCourse = null;
     }
 }

@@ -172,7 +172,6 @@ public class SettingPage extends JPanel {
             chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter("images", "jpeg", "jpg", "png", "gif");
             chooser.setFileFilter(filter);
-
         }
 
         void choose(){

@@ -3,8 +3,7 @@ package events;
 import data.manager.*;
 import data.models.*;
 import javax.swing.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class SearchEvent extends KeyAdapter {

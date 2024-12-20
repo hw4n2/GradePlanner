@@ -11,6 +11,7 @@ public class UserManager {
     public UserManager() {
         fileManager = new CSVManager();
     }
+
     public UserModel login(String id, String password) {
         id = id.trim();
         password = password.trim();

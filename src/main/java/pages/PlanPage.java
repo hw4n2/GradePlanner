@@ -6,10 +6,7 @@ import events.SearchEvent;
 
 import java.util.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -268,5 +265,10 @@ public class PlanPage extends JPanel{
 
         if(!inputlist.isEmpty()) infoLabel.setText("Credits " + infos[1] + " / 21    Total Credits " + creditSum + " / 65");
         else infoLabel.setText("Credits - / 21    Total Credits " + creditSum + " / 65");
+
+        lectureInput.removeAllItems();
+        lectureIDInput.setText("");
+        creditInput.setText("");
+        curCourse = null;
     }
 }

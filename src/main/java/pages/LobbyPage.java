@@ -26,7 +26,7 @@ public class LobbyPage extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout(0, 5));
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JPanel infoPanel = new JPanel(new GridLayout(2, 3));
-        JLabel halfline = new JLabel("---------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        JLabel halfline = new JLabel();
         graphPanel = new GraphPanel();
         btnPanel.setPreferredSize(new Dimension(0, 40));
         infoPanel.setPreferredSize(new Dimension(0, 60));

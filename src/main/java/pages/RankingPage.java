@@ -4,16 +4,12 @@ import data.manager.*;
 import data.models.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 
 public class RankingPage extends JPanel {
-    private ArrayList<JPanel> userLabels;
     private String[] data = { "ID", "Name", "Year/Semester", "Grade" };
     private UserModel user;
 
@@ -28,7 +24,6 @@ public class RankingPage extends JPanel {
         this.user = user;
         this.btnList = btnList;
 
-        userLabels = new ArrayList<>();
         setLayout(new BorderLayout(0, 10));
         setBorder(new EmptyBorder(10, 0, 0, 0));
         setBackground(Color.WHITE);
@@ -58,7 +53,6 @@ public class RankingPage extends JPanel {
             public void valueChanged(ListSelectionEvent e){
                 if(btnList.getSelectedValue() != null && btnList.getSelectedValue().equals("Users")){
                     if(userManager != null && user != null) setRanking();
-
                 }
             }
         });

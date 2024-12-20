@@ -3,10 +3,8 @@ package data.manager;
 import data.models.*;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 
 class CSVManager {
     private BufferedWriter bw = null;
