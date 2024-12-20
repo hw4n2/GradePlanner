@@ -14,7 +14,10 @@ public class UserManager {
     public UserModel login(String id, String password) {
         id = id.trim();
         password = password.trim();
-        if(id.isEmpty() || password.isEmpty()) { return null; }
+        if(id.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "check your inputs", "error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
         return fileManager.verifyUser(id, password);
     }
 
