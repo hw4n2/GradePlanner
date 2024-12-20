@@ -68,8 +68,8 @@ public class MainWindow extends JFrame {
         inputComPanel.setBackground(Color.cyan);
         JLabel idLabel = new JLabel("Student ID");
         JLabel pwLabel = new JLabel("Password");
-        JTextField loginIdInput = new JTextField("12211587");
-        JPasswordField loginpwInput = new JPasswordField("1234");
+        JTextField loginIdInput = new JTextField();
+        JPasswordField loginpwInput = new JPasswordField();
         JButton loginBtn = new JButton("SignIn");
         loginBtn.setPreferredSize(new Dimension(100, 100));
         loginBtn.addActionListener(new ActionListener(){

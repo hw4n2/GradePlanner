@@ -93,7 +93,10 @@ class CSVManager {
                     if(field[1].equals(password)) {
                         return new UserModel(field[0], field[2], field[3]);
                     }
-                    else return null;
+                    else {
+                        JOptionPane.showMessageDialog(null, "wrong password", "error", JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    }
                 }
             }
         } catch(IOException e){
