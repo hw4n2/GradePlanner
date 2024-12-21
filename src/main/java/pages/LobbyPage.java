@@ -154,7 +154,7 @@ public class LobbyPage extends JPanel {
             int vgap = (getHeight() - 60) / (indexY.size());
             int hgap = (getWidth() - 60) / semester.length;
             int lowerPos = getHeight() - 50;
-            Graphics2D g2d = (Graphics2D) g; //chatGPT reference
+            Graphics2D g2d = (Graphics2D) g; //chatGPT reference to make thick oval
             Stroke oldstroke = g2d.getStroke();
             int lowerY = lowerPos, upperY = 0;
             for(int i = 0; i < indexY.size(); i++){ //draw y axis grade indexY

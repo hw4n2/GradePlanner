@@ -132,7 +132,6 @@ public class CourseUIModel extends JPanel {
         if (!(obj instanceof CourseUIModel)) return false;
         CourseUIModel other = (CourseUIModel) obj;
         String thisName = this.nameItem.getText();
-        String thisRecommend = this.recommendItem.getText();
         String thisGrade = this.gradeItem.getText();
         String otherName = other.nameItem.getText();
         String otherGrade = other.gradeItem.getText();
